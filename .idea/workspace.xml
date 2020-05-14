@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="" />
+    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/iotcontroller/IoTController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/mqtt/mqttConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/WebController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/WebController.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +19,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -31,12 +38,16 @@
     <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1bu4BBnMTfMVDPoHNk4tkjKT44J" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -44,6 +55,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunManager">
     <configuration name="IotserverApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -65,18 +77,30 @@
       <option name="presentableId" value="Default" />
       <updated>1589468506024</updated>
       <workItem from="1589468508581" duration="944000" />
-      <workItem from="1589474054374" duration="269000" />
+      <workItem from="1589474054374" duration="2211000" />
     </task>
+    <task id="LOCAL-00001" summary=".">
+      <created>1589474525998</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1589474525998</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="585" y="1199" key="CommitChangelistDialog2" timestamp="1589474454518">
+    <state x="585" y="1199" key="CommitChangelistDialog2" timestamp="1589474525162">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state x="585" y="1199" key="CommitChangelistDialog2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474454518" />
+    <state x="585" y="1199" key="CommitChangelistDialog2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474525162" />
     <state x="830" y="1498" key="Github.ShareDialog" timestamp="1589474375254">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
@@ -85,37 +109,41 @@
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
     <state x="765" y="1310" key="Github.UntrackedFilesDialog/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474388941" />
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1589474461571">
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1589475801633">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461571" />
-    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1589474461570">
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801633" />
+    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1589475801633">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461570" />
-    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1589474461570">
+    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801633" />
+    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1589475801633">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461570" />
-    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1589474461570">
+    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801633" />
+    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1589475801633">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461570" />
-    <state width="1877" height="285" key="GridCell.Tab.1.bottom" timestamp="1589474461571">
+    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801633" />
+    <state width="1877" height="285" key="GridCell.Tab.1.bottom" timestamp="1589475801634">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.1.bottom/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461571" />
-    <state width="1877" height="285" key="GridCell.Tab.1.center" timestamp="1589474461571">
+    <state width="1877" height="285" key="GridCell.Tab.1.bottom/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801634" />
+    <state width="1877" height="285" key="GridCell.Tab.1.center" timestamp="1589475801634">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.1.center/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461571" />
-    <state width="1877" height="285" key="GridCell.Tab.1.left" timestamp="1589474461571">
+    <state width="1877" height="285" key="GridCell.Tab.1.center/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801634" />
+    <state width="1877" height="285" key="GridCell.Tab.1.left" timestamp="1589475801633">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.1.left/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461571" />
-    <state width="1877" height="285" key="GridCell.Tab.1.right" timestamp="1589474461571">
+    <state width="1877" height="285" key="GridCell.Tab.1.left/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801633" />
+    <state width="1877" height="285" key="GridCell.Tab.1.right" timestamp="1589475801634">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.1.right/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474461571" />
+    <state width="1877" height="285" key="GridCell.Tab.1.right/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589475801634" />
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2" timestamp="1589474537318">
+      <screen x="0" y="1080" width="1920" height="1050" />
+    </state>
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589474537318" />
   </component>
 </project>
