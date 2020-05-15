@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="IoT Server:war exploded">
+  <artifact type="exploded-war" build-on-make="true" name="IoT Server:war exploded">
     <output-path>$PROJECT_DIR$/target/iotserver-0.0.1-SNAPSHOT</output-path>
     <properties id="maven-jee-properties">
       <options>
