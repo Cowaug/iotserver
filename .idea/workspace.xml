@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/DeviceType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/database/JawMySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/IoT_Server_war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/IoT_Server_war.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/IoT_Server_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/IoT_Server_war_exploded.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/iotcontroller/IoTController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/iotcontroller/IoTController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/mqtt/mqttConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/mqtt/MQTTConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/DeviceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/iot/iotserver/DeviceType.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +82,7 @@
       <workItem from="1589468508581" duration="944000" />
       <workItem from="1589474054374" duration="2391000" />
       <workItem from="1589522841580" duration="2858000" />
-      <workItem from="1589549219550" duration="292000" />
+      <workItem from="1589549219550" duration="4427000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <created>1589474525998</created>
@@ -104,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589476352237</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added comment">
+      <created>1589549542144</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1589549542144</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,12 +113,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="Added comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added comment" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="585" y="1199" key="CommitChangelistDialog2" timestamp="1589476351496">
-      <screen x="0" y="1080" width="1920" height="1050" />
+    <state x="585" y="119" key="CommitChangelistDialog2" timestamp="1589549540891">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
+    <state x="585" y="119" key="CommitChangelistDialog2/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1589549540891" />
     <state x="585" y="1199" key="CommitChangelistDialog2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589476351496" />
     <state x="830" y="1498" key="Github.ShareDialog" timestamp="1589474375254">
       <screen x="0" y="1080" width="1920" height="1050" />
@@ -163,9 +166,10 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="440" y="99" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1589534447335" />
-    <state x="552" y="1337" key="Vcs.Push.Dialog.v2" timestamp="1589476353967">
-      <screen x="0" y="1080" width="1920" height="1050" />
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1589549555964">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1589549555964" />
     <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1589476353967" />
   </component>
 </project>
