@@ -77,7 +77,7 @@ insert into IoT_USERS values
 '296d55544f37a33eaec689b0e13a6f9ef726486c717def9727e18b965e8c59ebb3efe7feba2d526c089444b32be5e9dffd1605f2fcfb3868bdd8607fd7cc50b76ffdaf2fe7793a1740f78972b3ec1e0a2e733fb34e16163a630b15b0ef947ebecb3d92c2db69ae70ad24995fe5df4feaee5950dd055de8c10d9a27cccb00aa3e',
 'ADMIN');
 
-select * from IoT_USERS;
+select * from vuw8gi9vft7kuo7g.IoT_USERS;
 select * from SENSOR_TEMP;
 select * from SENSOR_LIGHT;
 select * from SENSOR_PLANT;

@@ -62,8 +62,8 @@ public class WebController {
                 e.printStackTrace();
             }
 
-        if (userId == null && password == null)
-            return new ResponseEntity<>("Empty username/password", HttpStatus.BAD_REQUEST);
+        if (userId == null || password == null)
+            return new ResponseEntity<>("Missing username/password", HttpStatus.BAD_REQUEST);
 
         try {
             // authentication
