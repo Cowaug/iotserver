@@ -49,8 +49,9 @@ public class JawMySQL {
     }
 
     public static User login(String userId, String password) throws SQLException {
+
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select userId,permission from IoT_USERS where userId = '" + userId + "' and password = '" + hashPassword(password.toCharArray()) + "'");
+            ResultSet rs = st.executeQuery("select userId, permission from IoT_USERS where userId = '" + userId + "' and password = '" + hashPassword(password.toCharArray()) + "'");
             return rs.next()? new User(userId,Permissions.valueOf(rs.getString(2))):null;
         }
     }

@@ -1,11 +1,16 @@
 use vuw8gi9vft7kuo7g;
-drop table users;
 
 create table IoT_USERS
 (userId varchar(100) primary key,
 password text not null
 );
 alter table IoT_USERS add permission varchar(10) default "GUEST" not null ;
+
+create table DEVICE_INFO
+(device_id VARCHAR(20),
+userId VARCHAR(100),
+info VARCHAR(1000)
+);
 
 create table SENSOR_TEMP
 (_timestamp TIMESTAMP,
@@ -66,7 +71,6 @@ operating_time_remain TINYINT,
 
 CONSTRAINT motor_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
-
 
 insert into IoT_USERS values
 ('admin',

@@ -1,6 +1,9 @@
 package vn.edu.hcmut.iotserver;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,11 @@ import vn.edu.hcmut.iotserver.Entities.User;
 import vn.edu.hcmut.iotserver.database.JawMySQL;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 import static vn.edu.hcmut.iotserver.Entities.Attributes.*;
 
@@ -40,37 +48,53 @@ public class WebController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object loginPOST(ModelMap modelMap, HttpServletRequest request) {
+    public Object loginPOST(HttpServletRequest request) {
+        String userId = request.getParameter("user-id");
+        String password = request.getParameter("password");
+
+        if (userId == null && password == null)
+            try {
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
+                userId = (String) jsonObject.get("user-id");
+                password= (String)jsonObject.get("password");
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+
+        if (userId == null && password == null)
+            return new ResponseEntity<>("Empty username/password", HttpStatus.BAD_REQUEST);
+
         try {
             // authentication
-            User user = JawMySQL.login(request.getParameter("user-id"), request.getParameter("password"));
+            User user = JawMySQL.login(userId,password);
 
             if (user != null) {
                 request.getSession().setAttribute(USER_INFO.toString(), user);
                 return new ResponseEntity<>("Login success", HttpStatus.OK);
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>("Wrong username/password", HttpStatus.BAD_REQUEST);
     }
 
 
-//    @RequestMapping(value = "/login", method = RequestMethod.GET)
-//    public Object loginGET(ModelMap modelMap, HttpServletRequest request) {
-//        try {
-//            // authentication
-//            User user = JawMySQL.login("admin", "admin");
-//
-//            if (user != null) {
-//                request.getSession().setAttribute(USER_INFO.toString(), user);
-//                return new ResponseEntity<>("Login success as " + user.getPermission() + " " + user.getUserId(), HttpStatus.OK);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
-//    }
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public Object loginGET(ModelMap modelMap, HttpServletRequest request) {
+        try {
+            // authentication
+            User user = JawMySQL.login("admin", "admin");
+
+            if (user != null) {
+                request.getSession().setAttribute(USER_INFO.toString(), user);
+                return new ResponseEntity<>("Login success as " + user.getPermission() + " " + user.getUserId(), HttpStatus.OK);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>("Wrong username/password", HttpStatus.FORBIDDEN);
+    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Object registerPOST(ModelMap modelMap, HttpServletRequest request) {
