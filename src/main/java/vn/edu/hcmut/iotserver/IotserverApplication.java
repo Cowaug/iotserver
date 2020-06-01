@@ -1,4 +1,4 @@
-package com.iot.iotserver;
+package vn.edu.hcmut.iotserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

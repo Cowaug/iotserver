@@ -1,4 +1,4 @@
-package com.iot.iotserver.mqtt;
+package vn.edu.hcmut.iotserver.mqtt;
 
 /**
  * This class send and receive data from MQTT server

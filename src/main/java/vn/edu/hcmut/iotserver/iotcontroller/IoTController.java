@@ -1,4 +1,4 @@
-package com.iot.iotserver.iotcontroller;
+package vn.edu.hcmut.iotserver.iotcontroller;
 
 /**
  * This class is for logical control of the IoT device

@@ -1,4 +1,4 @@
-package com.iot.iotserver;
+package vn.edu.hcmut.iotserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

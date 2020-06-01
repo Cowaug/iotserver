@@ -1,4 +1,4 @@
-package com.iot.iotserver;
+package vn.edu.hcmut.iotserver;
 
 public enum DeviceType {
     SENSOR_LIGHT("lightSensor"),
