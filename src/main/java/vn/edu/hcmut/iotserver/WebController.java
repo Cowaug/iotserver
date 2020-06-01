@@ -33,11 +33,17 @@ public class WebController {
         else return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
     }
 
+    @GetMapping(value = "/getStatusNoLogin", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Object getStatusNologin(HttpServletRequest request) {
+        return "this is encrypted data object file".getBytes();
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object viewLoginPOST(ModelMap modelMap, HttpServletRequest request) {
+    public Object loginPOST(ModelMap modelMap, HttpServletRequest request) {
         try {
             // authentication
-            String user = JawMySQL.login(request.getParameter("user-id"), request.getParameter("password"));
+            User user = JawMySQL.login(request.getParameter("user-id"), request.getParameter("password"));
 
             if (user != null) {
                 request.getSession().setAttribute(USER_INFO.toString(), user);
@@ -47,5 +53,37 @@ public class WebController {
             ex.printStackTrace();
         }
         return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
+    }
+
+
+//    @RequestMapping(value = "/login", method = RequestMethod.GET)
+//    public Object loginGET(ModelMap modelMap, HttpServletRequest request) {
+//        try {
+//            // authentication
+//            User user = JawMySQL.login("admin", "admin");
+//
+//            if (user != null) {
+//                request.getSession().setAttribute(USER_INFO.toString(), user);
+//                return new ResponseEntity<>("Login success as " + user.getPermission() + " " + user.getUserId(), HttpStatus.OK);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
+//    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Object registerPOST(ModelMap modelMap, HttpServletRequest request) {
+        try {
+            // authentication
+            User user = JawMySQL.register(request.getParameter("user-id"), request.getParameter("password"));
+
+            request.getSession().setAttribute(USER_INFO.toString(), user);
+            return new ResponseEntity<>("Register success", HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>("Register fail, check username and password.", HttpStatus.BAD_REQUEST);
     }
 }

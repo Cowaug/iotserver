@@ -1,6 +1,8 @@
 package vn.edu.hcmut.iotserver.database;
 
 import org.apache.commons.codec.binary.Hex;
+import vn.edu.hcmut.iotserver.Entities.Permissions;
+import vn.edu.hcmut.iotserver.Entities.User;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -23,7 +25,7 @@ public class JawMySQL {
 
     public static void init() {
         if (connection != null) return;
-        System.out.println("Connecting to database (MikoBot)");
+        System.out.println("Connecting to database (IoT Server)");
         try {
             URI jdbUri = (url == null ? new URI(System.getenv("DB_URL")) : new URI(url));
             while (connection == null) {
@@ -46,23 +48,26 @@ public class JawMySQL {
 
     }
 
-    public static String login(String userId, String password) throws SQLException {
-        return userId;
-//        try (Statement st = connection.createStatement()) {
-//            ResultSet rs = st.executeQuery("select username,permission from users where userId = '" + userId + "' and password = '" + hashPassword(password.toCharArray(), SALT) + "'");
-//            return rs.next()? new User(userId,rs.getString(1), Integer.parseInt(rs.getString(2))):null;
-//        }
+    public static User login(String userId, String password) throws SQLException {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("select userId,permission from IoT_USERS where userId = '" + userId + "' and password = '" + hashPassword(password.toCharArray()) + "'");
+            return rs.next()? new User(userId,Permissions.valueOf(rs.getString(2))):null;
+        }
     }
 
-    private static String hashPassword(final char[] password, final byte[] salt) {
+    private static String hashPassword(final char[] password) {
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance(SKF);
-            PBEKeySpec spec = new PBEKeySpec(password, salt, 1024, 1024);
+            PBEKeySpec spec = new PBEKeySpec(password, JawMySQL.SALT, 1024, 1024);
             SecretKey key = skf.generateSecret(spec);
             byte[] res = key.getEncoded();
             return Hex.encodeHexString(res);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static User register(String userId, String password) {
+        return new User(userId, Permissions.ADMIN);
     }
 }
