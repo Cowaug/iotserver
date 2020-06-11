@@ -19,18 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="Fixed login issue when using &quot;json&quot; instead of &quot;form-data&quot;">
-      <change afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/Authentication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="Complete pushToDatabase function + rearrange database class + modify mqtt interface">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/DeviceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/DeviceType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/IotserverApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/IotserverApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/JawMySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/JawMySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/iotcontroller/IoTController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/iotcontroller/IoTController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/mqtt/MQTTConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/mqtt/MQTTConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/database/IoT Server.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/IoT Server.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +46,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -131,7 +128,7 @@
       <workItem from="1591006033712" duration="3958000" />
       <workItem from="1591010121745" duration="125000" />
       <workItem from="1591536350772" duration="715000" />
-      <workItem from="1591853727417" duration="4355000" />
+      <workItem from="1591853727417" duration="7267000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <created>1589474525998</created>
@@ -210,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591536457348</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Complete pushToDatabase function + rearrange database class + modify mqtt interface">
+      <created>1591858435897</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1591858435898</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,18 +241,27 @@
     <MESSAGE value="added database init commands" />
     <MESSAGE value="Fixed login issue when using &quot;json&quot; instead of &quot;form-data&quot;" />
     <MESSAGE value="Fix SQL Injection flaws" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix SQL Injection flaws" />
+    <MESSAGE value="Complete pushToDatabase function + rearrange database class + modify mqtt interface" />
+    <option name="LAST_COMMIT_MESSAGE" value="Complete pushToDatabase function + rearrange database class + modify mqtt interface" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="1263" key="#Deployment" timestamp="1591854674916">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
     <state x="552" y="1263" key="#Deployment/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591854674916" />
+    <state x="586" y="1283" key="#Inspections" timestamp="1591859667616">
+      <screen x="0" y="1080" width="1920" height="1050" />
+    </state>
+    <state x="586" y="1283" key="#Inspections/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591859667616" />
     <state x="349" y="1446" key="#SQL_Dialects" timestamp="1591857234564">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
     <state x="349" y="366" key="#SQL_Dialects/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1591001490262" />
     <state x="349" y="1446" key="#SQL_Dialects/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591857234564" />
+    <state x="644" y="1268" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1591859636335">
+      <screen x="0" y="1080" width="1920" height="1050" />
+    </state>
+    <state x="644" y="1268" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591859636335" />
     <state x="414" y="1259" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591002252090">
       <screen x="0" y="1080" width="1920" height="1050" />
     </state>
@@ -339,11 +352,11 @@
     </state>
     <state x="440" y="99" key="SettingsEditor/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1590997759705" />
     <state x="440" y="99" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1589534447335" />
-    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1591010155732">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2" timestamp="1591858439377">
+      <screen x="0" y="1080" width="1920" height="1050" />
     </state>
     <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1591010155732" />
-    <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591003055883" />
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1591858439377" />
     <state x="289" y="445" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590556178612">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
