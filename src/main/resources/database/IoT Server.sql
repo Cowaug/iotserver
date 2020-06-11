@@ -37,7 +37,7 @@ humid_value TINYINT,
 CONSTRAINT sensor_plant_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
 
-create table NDICATE_LIGHT 
+create table INDICATE_LIGHT 
 (_timestamp TIMESTAMP,
 device_id VARCHAR(20),
 color TINYINT,

@@ -14,6 +14,6 @@ public class IotserverApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        JawMySQL.init();
+
     }
 }

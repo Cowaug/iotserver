@@ -1,5 +1,7 @@
 package vn.edu.hcmut.iotserver.mqtt;
 
+import org.json.simple.JSONObject;
+
 /**
  * This class send and receive data from MQTT server
  *
@@ -9,8 +11,5 @@ package vn.edu.hcmut.iotserver.mqtt;
 public class MQTTConnection {
     public static void startService(){
         //todo connect to server and collect data
-    }
-    public static void sendCommandToIoTDevice(String deviceType, String... controlValues){
-        //todo send control payload to the server
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmut.iotserver.Entities.Permissions;
 import vn.edu.hcmut.iotserver.Entities.User;
+import vn.edu.hcmut.iotserver.database.Authentication;
 import vn.edu.hcmut.iotserver.database.JawMySQL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,7 @@ public class WebController {
 
         try {
             // authentication
-            User user = JawMySQL.login(userId,password);
+            User user = Authentication.login(userId,password);
 
             if (user != null) {
                 request.getSession().setAttribute(USER_INFO.toString(), user);
@@ -84,7 +85,7 @@ public class WebController {
     public Object loginGET(ModelMap modelMap, HttpServletRequest request) {
         try {
             // authentication
-            User user = JawMySQL.login("admin", "admin");
+            User user = Authentication.login("admin", "admin");
 
             if (user != null) {
                 request.getSession().setAttribute(USER_INFO.toString(), user);
@@ -100,7 +101,7 @@ public class WebController {
     public Object registerPOST(ModelMap modelMap, HttpServletRequest request) {
         try {
             // authentication
-            User user = JawMySQL.register(request.getParameter("user-id"), request.getParameter("password"));
+            User user = Authentication.register(request.getParameter("user-id"), request.getParameter("password"));
 
             request.getSession().setAttribute(USER_INFO.toString(), user);
             return new ResponseEntity<>("Register success", HttpStatus.OK);

@@ -1,20 +1,20 @@
 package vn.edu.hcmut.iotserver;
 
 public enum DeviceType {
-    SENSOR_LIGHT("lightSensor"),
-    SENSOR_TEMP("temperatureSensor"),
-    SENSOR_PLANT("plantSensor"),
-    IDENT_LIGHT("indicateLight"),
-    LIGHT_BULB("lightBulb"),
-    AIR_CONDITIONER("airConditioner"),
-    MOTOR("motor");
+    SENSOR_LIGHT("SENSOR_LIGHT"),
+    SENSOR_TEMP("SENSOR_TEMP"),
+    SENSOR_PLANT("SENSOR_PLANT"),
+    INDICATE_LIGHT("INDICATE_LIGHT"),
+    LIGHT_BULB("LIGHTBULB"),
+    AIR_CONDITIONER("AIR_CONDITIONER"),
+    MOTOR("MOTOR");
 
-    private final String value;
-    DeviceType(String value){
-        this.value=value;
+    private final String databaseName;
+    DeviceType(String databaseName){
+        this.databaseName = databaseName;
     }
 
-    public String getValue() {
-        return value;
+    public String getDatabase() {
+        return databaseName;
     }
 }
