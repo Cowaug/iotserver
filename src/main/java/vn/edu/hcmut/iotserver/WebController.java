@@ -23,7 +23,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
+import static vn.edu.hcmut.iotserver.DeviceType.SENSOR_TEMP;
 import static vn.edu.hcmut.iotserver.Entities.Attributes.*;
+import static vn.edu.hcmut.iotserver.database.IoTSensorData.getDeviceStatus7Day;
 
 @Controller
 public class WebController {
@@ -44,8 +46,8 @@ public class WebController {
 
     @GetMapping(value = "/getStatusNoLogin", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
-    Object getStatusNologin(HttpServletRequest request) {
-        return "this is encrypted data object file".getBytes();
+    Object getStatusNologin(HttpServletRequest request) throws SQLException {
+        return getDeviceStatus7Day(SENSOR_TEMP, "temp1").toJSONString().getBytes();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)

@@ -15,20 +15,12 @@ import static vn.edu.hcmut.iotserver.DeviceType.LIGHT_BULB;
 public class IotserverApplication implements CommandLineRunner {
 
     public static void main(String[] args) throws MqttException {
-        JawMySQL.init();
-        MQTTSubscriber.init();
-//        JSONObject json = new JSONObject();
-//        json.put("device_id","lightbulc1");
-//                json.put("values", new int[]{100});
-//        MQTTPublisher.sendCommandToIoTDevice(
-//                LIGHT_BULB + "/abcd",
-//                json
-//        );
-//        SpringApplication.run(IotserverApplication.class, args);
+        SpringApplication.run(IotserverApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
+        JawMySQL.init();
+        MQTTSubscriber.init();
     }
 }
