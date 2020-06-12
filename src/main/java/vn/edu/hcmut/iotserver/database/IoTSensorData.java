@@ -12,10 +12,18 @@ import java.util.Collections;
 
 import static vn.edu.hcmut.iotserver.DeviceType.SENSOR_TEMP;
 
+/**
+ * Get data about IoT devices
+ */
 public class IoTSensorData {
     static Connection connection = JawMySQL.getConnection();
 
-
+    /**
+     * Push the payload into MySQL database
+     * @param deviceType
+     * @param payload JSON Object recieved from server
+     * @throws SQLException
+     */
     public static void pushToDatabase(DeviceType deviceType, JSONObject payload) throws SQLException {
         try (Statement st = connection.createStatement()) {
             Timestamp sqlTimestamp = new Timestamp(System.currentTimeMillis());
@@ -34,6 +42,12 @@ public class IoTSensorData {
         }
     }
 
+    /**
+     * For user request only
+     * @param deviceType
+     * @return
+     * @throws SQLException
+     */
     public static JSONObject[] getNewestDeviceStatus(DeviceType deviceType) throws SQLException {
         try (Statement st = connection.createStatement()) {
             // todo viết câu sql, dùng select * nha :)
@@ -78,6 +92,9 @@ public class IoTSensorData {
         }
     }
 
+    /**
+     * For user request only
+     */
     public static JSONObject getDeviceStatus7Day(DeviceType deviceType, String deviceId) throws SQLException {
         try (Statement st = connection.createStatement()) {
             String sql = "";
@@ -134,6 +151,12 @@ public class IoTSensorData {
 
     }
 
+    /**
+     * Get which device the sensor control
+     * @param sensorId
+     * @return
+     * @throws SQLException
+     */
     public static ArrayList<String> getMapping(String sensorId) throws SQLException {
         try (Statement st = connection.createStatement()) {
             ResultSet resultSet = st.executeQuery("SELECT * FROM SENSOR_DEVICE_INFOS WHERE sensor_id='" + sensorId + "'");
@@ -146,6 +169,12 @@ public class IoTSensorData {
         }
     }
 
+    /**
+     * Get operating mode of the device (AUTO, ALWAYS ON, ALWAYS OFF)
+     * @param deviceId
+     * @return
+     * @throws SQLException
+     */
     public static DeviceMode getMode(String deviceId) throws SQLException {
         try (Statement st = connection.createStatement()) {
             ResultSet resultSet = st.executeQuery("SELECT * FROM DEVICE_MODE WHERE device_id='" + deviceId + "'");
@@ -157,6 +186,12 @@ public class IoTSensorData {
         }
     }
 
+    /**
+     * Set operating mode of the device
+     * @param deviceId
+     * @param mode
+     * @throws SQLException
+     */
     public static void setMode(String deviceId, DeviceMode mode) throws SQLException {
         try (Statement st = connection.createStatement()) {
             st.execute("UPDATE DEVICE_MODE SET current_mode = '" + mode.toString() + "'WHERE device_id='" + deviceId + "'");

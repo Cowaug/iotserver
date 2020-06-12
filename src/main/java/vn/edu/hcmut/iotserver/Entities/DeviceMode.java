@@ -1,5 +1,5 @@
 package vn.edu.hcmut.iotserver.Entities;
 
 public enum DeviceMode {
-    OFF,AUTO,ON
+    OFF,AUTO,ON,SCHEDULE
 }

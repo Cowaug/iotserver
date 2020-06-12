@@ -6,11 +6,19 @@ password text not null
 );
 alter table IoT_USERS add permission varchar(10) default "GUEST" not null ;
 
-create table DEVICE_INFO
+create table SENSOR_DEVICE_INFOS
 (device_id VARCHAR(20),
-userId VARCHAR(100),
-info VARCHAR(1000)
+sensor_id VARCHAR(20),
+
+CONSTRAINT sensor__device_info_pk PRIMARY KEY USING BTREE (device_id,sensor_id)
 );
+
+create table DEVICE_MODE
+(device_id VARCHAR(20) primary key,
+current_mode VARCHAR(20)
+);
+
+
 
 create table SENSOR_TEMP
 (_timestamp TIMESTAMP,
@@ -73,7 +81,7 @@ CONSTRAINT motor_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
 
 insert into IoT_USERS values
-('admin',
+('admin2',
 '296d55544f37a33eaec689b0e13a6f9ef726486c717def9727e18b965e8c59ebb3efe7feba2d526c089444b32be5e9dffd1605f2fcfb3868bdd8607fd7cc50b76ffdaf2fe7793a1740f78972b3ec1e0a2e733fb34e16163a630b15b0ef947ebecb3d92c2db69ae70ad24995fe5df4feaee5950dd055de8c10d9a27cccb00aa3e',
 'ADMIN');
 

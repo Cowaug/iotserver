@@ -14,6 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * @author Bình
+ * Verifing user, create new user
+ * DO NOT MODIFY
+ */
 public class Authentication {
     static Connection connection = JawMySQL.getConnection();
     private static final byte[] SALT = System.getenv("SALT_CRYPTO").getBytes();
