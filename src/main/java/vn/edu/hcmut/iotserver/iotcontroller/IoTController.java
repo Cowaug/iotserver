@@ -1,7 +1,13 @@
 package vn.edu.hcmut.iotserver.iotcontroller;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.simple.JSONObject;
 import vn.edu.hcmut.iotserver.DeviceType;
+import vn.edu.hcmut.iotserver.database.IoTSensorData;
+import vn.edu.hcmut.iotserver.mqtt.MQTTPublisher;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * This class is for logical control of the IoT device
@@ -13,28 +19,42 @@ public class IoTController {
     private static int lightThreshold = 650;// default 650 lumen
     private static int plantThreshold = 50;// default 50%
 
-    public static JSONObject processData(DeviceType deviceType, String deviceId, String... sensorValues) {
+    public static void processDataAndSendToDevice(DeviceType deviceType, String sensorId, JSONObject payload) throws SQLException {
         //todo control IoT application based on given value
         // sensorValues theo thứ tự trong format payload
-        JSONObject returnJSONObject = new JSONObject();
-        returnJSONObject.put("device_id", deviceId);
-        switch (deviceType) {
-            case AIR_CONDITIONER:
-                return null;
-            case SENSOR_PLANT:
-                return null;
-            case LIGHT_BULB:
-                return null;
-            case MOTOR:
-                return null;
-            case SENSOR_TEMP:
-                return null;
-            case SENSOR_LIGHT:
-                return null;
-            case INDICATE_LIGHT:
-                return null;
-        }
-        return null;
+
+        IoTSensorData.getMapping(sensorId).forEach(s -> {
+            try {
+                JSONObject returnJSONObject = new JSONObject();
+                returnJSONObject.put("device_id", s);
+
+                switch (deviceType) {
+                    case MOTOR:
+                    case AIR_CONDITIONER:
+                    case INDICATE_LIGHT:
+                    case LIGHT_BULB:
+                        return;
+
+                    case SENSOR_PLANT:
+                        break;
+
+                    case SENSOR_TEMP:
+
+                        break;
+
+                    case SENSOR_LIGHT:
+
+                        break;
+                }
+
+                MQTTPublisher.sendCommandToIoTDevice("Control/" + s, returnJSONObject);
+                System.out.println("----->" + returnJSONObject.toJSONString());
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        });
+
+
     }
 
     /**
