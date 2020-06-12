@@ -21,8 +21,7 @@ public class JawMySQL {
     private static Connection connection = null;
     static String url = null;
 
-    public static void init() {
-        if (connection != null) return;
+    static {
         System.out.println("Connecting to database (IoT Server)");
         try {
             URI jdbUri = (url == null ? new URI(System.getenv("DB_URL")) : new URI(url));
@@ -45,5 +44,8 @@ public class JawMySQL {
     public static Connection getConnection() {
         if (connection == null) init();
         return connection;
+    }
+
+    public static void init() {
     }
 }

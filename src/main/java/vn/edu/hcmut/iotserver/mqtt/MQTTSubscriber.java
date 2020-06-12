@@ -24,15 +24,12 @@ public class MQTTSubscriber {
                 @Override
                 public void messageArrived(String topic, MqttMessage mqttMessage)  {
                     try{
-                        System.out.println("<-----" + new String(mqttMessage.getPayload()));
+                        System.out.println("<----- " + new String(mqttMessage.getPayload()));
                         JSONObject jsonObject = (JSONObject) new JSONParser().parse(new String(mqttMessage.getPayload()));
 
-                        // 0 topic name, 1 device type, 2 device id
-                        String[] stringArray = topic.split("/");
-
-                        DeviceType deviceType = DeviceType.valueOf(stringArray[1]);
+                        DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
                         IoTSensorData.pushToDatabase(deviceType, jsonObject);
-                        IoTController.processDataAndSendToDevice(deviceType, stringArray[2], jsonObject);
+                        IoTController.processDataAndSendToDevice(deviceType, jsonObject);
                     }catch (Exception e){
                         e.printStackTrace();
                     }

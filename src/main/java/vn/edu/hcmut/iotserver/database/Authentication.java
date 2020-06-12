@@ -24,6 +24,13 @@ public class Authentication {
     private static final byte[] SALT = System.getenv("SALT_CRYPTO").getBytes();
     private static final String SKF = System.getenv("SKF");
 
+    /**
+     * Check username and password in database
+     * @param id user id
+     * @param password password
+     * @return User Object if user id and password is valid
+     * @throws SQLException .
+     */
     public static User login(String id, String password) throws SQLException {
         String userId = id.replace("'", "");
         try (Statement st = connection.createStatement()) {
@@ -32,6 +39,11 @@ public class Authentication {
         }
     }
 
+    /**
+     * Hash the password to compare it in database
+     * @param password user's password
+     * @return hashed password
+     */
     private static String hashPassword(final char[] password) {
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance(SKF);
@@ -44,6 +56,12 @@ public class Authentication {
         }
     }
 
+    /**
+     * Registing a new user for testing
+     * @param userId user id
+     * @param password password
+     * @return new User
+     */
     public static User register(String userId, String password) {
         return new User(userId, Permissions.ADMIN);
     }

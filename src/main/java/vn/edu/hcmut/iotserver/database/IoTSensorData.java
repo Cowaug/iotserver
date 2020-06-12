@@ -20,9 +20,9 @@ public class IoTSensorData {
 
     /**
      * Push the payload into MySQL database
-     * @param deviceType
-     * @param payload JSON Object recieved from server
-     * @throws SQLException
+     * @param deviceType DeviceType enum
+     * @param payload JSON Object received from server
+     * @throws SQLException .
      */
     public static void pushToDatabase(DeviceType deviceType, JSONObject payload) throws SQLException {
         try (Statement st = connection.createStatement()) {
@@ -43,10 +43,10 @@ public class IoTSensorData {
     }
 
     /**
-     * For user request only
-     * @param deviceType
-     * @return
-     * @throws SQLException
+     * Get current status of all devices (exclude sensor)
+     * @param deviceType DeviceType enum
+     * @return Array of JSON Object, each Object resprent status of a device
+     * @throws SQLException .
      */
     public static JSONObject[] getNewestDeviceStatus(DeviceType deviceType) throws SQLException {
         try (Statement st = connection.createStatement()) {
