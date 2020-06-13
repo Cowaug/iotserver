@@ -65,7 +65,7 @@ public class WebController {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
             DeviceType deviceType = DeviceType.valueOf((String) jsonObject.get("device_type"));
             String deviceId = (String) jsonObject.get("device_name");
-            if (!deviceId.equals("null"))
+            if (!deviceId.equals(""))
                 return IoTSensorData.getDeviceStatus7Day(deviceType, deviceId).toJSONString().getBytes();
             else
                 return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
