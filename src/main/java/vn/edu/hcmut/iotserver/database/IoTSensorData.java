@@ -48,47 +48,39 @@ public class IoTSensorData {
      * @return Array of JSON Object, each Object resprent status of a device
      * @throws SQLException .
      */
-    public static JSONObject[] getNewestDeviceStatus(DeviceType deviceType) throws SQLException {
+    public static JSONArray getNewestDeviceStatus(DeviceType deviceType) throws SQLException {
         try (Statement st = connection.createStatement()) {
             // todo viết câu sql, dùng select * nha :)
-            ResultSet resultSet = st.executeQuery("");
+            ResultSet resultSet = st.executeQuery("select *, MAX(_timestamp) as last_update  from "+deviceType.getDatabase()+" GROUP BY device_id");
 
-            ArrayList<JSONObject> timeAndStatus = new ArrayList<>();
+            JSONArray timeAndStatus = new JSONArray();
             while (resultSet.next()) {
                 JSONObject object = new JSONObject();
+                object.put("time", resultSet.getTimestamp("_timestamp").getTime());
+                object.put("device_id", resultSet.getString(2));
                 switch (deviceType) {
                     case SENSOR_TEMP:
-                        object.put("time", resultSet.getInt(1));
-                        object.put("device_id", resultSet.getInt(2));
                         object.put("temperature", resultSet.getInt(3));
                         object.put("humid", resultSet.getInt(4));
                         break;
                     case SENSOR_LIGHT:
-                        object.put("time", resultSet.getInt(1));
-                        object.put("device_id", resultSet.getInt(2));
                         object.put("light_value", resultSet.getInt(3));
                         break;
                     case SENSOR_PLANT:
-                        object.put("time", resultSet.getInt(1));
-                        object.put("device_id", resultSet.getInt(2));
                         object.put("humid", resultSet.getInt(3));
                         break;
                     case INDICATE_LIGHT:
-                        object.put("time", resultSet.getInt(1));
-                        object.put("device_id", resultSet.getInt(2));
                         object.put("color", resultSet.getInt(3));
                         break;
                     case LIGHT_BULB:
                     case AIR_CONDITIONER:
                     case MOTOR:
-                        object.put("time", resultSet.getInt(1));
-                        object.put("device_id", resultSet.getInt(2));
                         object.put("status", resultSet.getInt(3));
                         break;
                 }
                 timeAndStatus.add(object);
             }
-            return (JSONObject[]) timeAndStatus.toArray();
+            return timeAndStatus;
         }
     }
 
