@@ -17,8 +17,8 @@ import java.util.Iterator;
  * After process data, it will send the data back to the MQTT server by calling methods from MQTTConnection class
  */
 public class IoTController {
-    private static float temperatureThreshold = 27; // default is 27 Celsius
-    private static float humidityThreshold = 70;// default is 70 percent
+    private static int temperatureThreshold = 27; // default is 27 Celsius
+    private static int humidityThreshold = 70;// default is 70 percent
     private static int lightThreshold = 650;// default 650 lumen
     private static int plantThreshold = 50;// default 50%
 
@@ -31,11 +31,26 @@ public class IoTController {
                 JSONObject returnJSONObject = new JSONObject();
                 returnJSONObject.put("device_id", deviceId);
 
+                Object[] deviceControlInfo = IoTSensorData.getInfo(deviceId);
+                DeviceMode deviceMode = (DeviceMode) deviceControlInfo[0];
+                int sensorValue1 = (int) deviceControlInfo[1];
+                int sensorValue2 = (int) deviceControlInfo[2];
+
                 JSONArray array = (JSONArray) payload.get("values");
                 JSONArray list = new JSONArray();
                 switch (sensorType) {
-                    case SENSOR_PLANT:
-                        if (Integer.valueOf((String) array.get(0)) < plantThreshold) {
+                    case SENSOR_PLANT: {
+                        int compareThreshold = sensorValue1 < 0 ? plantThreshold : sensorValue1;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                            list.add("0");
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                            list.add("0");
+                            list.add("0");
+                        } else if (Integer.valueOf((String) array.get(0)) < compareThreshold) {
                             list.add("1");
                             list.add("50");
                             list.add("15");
@@ -44,33 +59,112 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         }
-                        break;
+                    }
+                    break;
 
-                    case SENSOR_TEMP:
-                        if (Integer.valueOf((String) array.get(0)) > temperatureThreshold) {
+                    case SENSOR_TEMP: {
+                        int compareThreshold1 = sensorValue1 < 0 ? temperatureThreshold : sensorValue1;
+                        int compareThreshold2 = sensorValue2 < 0 ? temperatureThreshold : sensorValue2;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                            list.add("0");
+                        } else if (Integer.valueOf((String) array.get(0)) > compareThreshold1) {
                             list.add("1");
                             list.add("27");
                         } else {
                             list.add("0");
                             list.add("0");
                         }
-                        break;
+                    }
+                    break;
 
-                    case SENSOR_LIGHT:
-                        if (Integer.valueOf((String) array.get(0)) < lightThreshold) {
+                    case SENSOR_LIGHT: {
+                        int compareThreshold = sensorValue1 < 0 ? lightThreshold : sensorValue1;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                        } else if (Integer.valueOf((String) array.get(0)) < compareThreshold) {
                             list.add("1");
                         } else {
                             list.add("0");
                         }
-                        break;
+                    }
+                    break;
+
+                    case Mois: {
+                        int compareThreshold = sensorValue1 < 0 ? plantThreshold : sensorValue1;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                            list.add("1000");
+                        } else if (Integer.valueOf((String) array.get(0)) < compareThreshold) {
+                            list.add("1");
+                            list.add("2500");
+                        } else {
+                            list.add("0");
+                            list.add("0");
+                        }
+
+                    }
+                    break;
+
+                    case TempHumi: {
+                        int compareThreshold1 = sensorValue1 < 0 ? temperatureThreshold : sensorValue1;
+                        int compareThreshold2 = sensorValue2 < 0 ? temperatureThreshold : sensorValue2;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                            list.add("128");
+                        } else if (Integer.valueOf((String) array.get(0)) > compareThreshold1) {
+                            list.add("1");
+                            list.add("128");
+                        } else {
+                            list.add("0");
+                            list.add("0");
+                        }
+                    }
+                    break;
+
+                    case Light: {
+                        int compareThreshold = sensorValue1 < 0 ? lightThreshold : sensorValue1;
+
+                        if (deviceMode == DeviceMode.OFF) {
+                            list.add("0");
+                            list.add("0");
+                        } else if (deviceMode == DeviceMode.ON) {
+                            list.add("1");
+                            list.add("255");
+                        } else if (Integer.valueOf((String) array.get(0)) < compareThreshold) {
+                            list.add("1");
+                            list.add("255");
+                        } else {
+                            list.add("0");
+                            list.add("0");
+                        }
+                    }
+                    break;
+
                     default:
                         return;
                 }
 
                 returnJSONObject.put("values", list);
-                System.out.println("-----> " + returnJSONObject.toJSONString());
+                System.out.println("\t-----> " + returnJSONObject.toJSONString());
                 MQTTPublisher.sendCommandToIoTDevice("Control/" + deviceId, returnJSONObject);
-            } catch (MqttException e) {
+                MQTTPublisher.sendCommandToIoTDevice("Topic/" + deviceId, returnJSONObject);
+            } catch (MqttException | SQLException e) {
                 e.printStackTrace();
             }
         });
@@ -99,7 +193,7 @@ public class IoTController {
      *
      * @param temperatureThreshold Value between 0 and 100
      */
-    public static void setTemperatureThreshold(float temperatureThreshold) {
+    public static void setTemperatureThreshold(int temperatureThreshold) {
         IoTController.temperatureThreshold = temperatureThreshold;
     }
 
@@ -108,7 +202,7 @@ public class IoTController {
      *
      * @param humidityThreshold Value between 0 and 100
      */
-    public static void setHumidityThreshold(float humidityThreshold) {
+    public static void setHumidityThreshold(int humidityThreshold) {
         IoTController.humidityThreshold = humidityThreshold;
     }
 

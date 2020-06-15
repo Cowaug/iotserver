@@ -13,9 +13,12 @@ sensor_id VARCHAR(20),
 CONSTRAINT sensor__device_info_pk PRIMARY KEY USING BTREE (device_id,sensor_id)
 );
 
+drop table DEVICE_MODE;
 create table DEVICE_MODE
 (device_id VARCHAR(20) primary key,
-current_mode VARCHAR(20)
+current_mode VARCHAR(20),
+sensor_value_1 SMALLINT,
+sensor_value_2 TINYINT
 );
 
 
