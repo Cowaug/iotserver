@@ -56,6 +56,24 @@ color TINYINT,
 CONSTRAINT indicate_light_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
 
+create table INDICATE_LIGHT_TEST
+(_timestamp TIMESTAMP,
+device_id VARCHAR(20),
+status TINYINT,
+intensity TINYINT,
+
+CONSTRAINT indicate_light_test_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
+);
+
+create table SPEAKER
+(_timestamp TIMESTAMP,
+device_id VARCHAR(20),
+status TINYINT,
+intensity SMALLINT,
+
+CONSTRAINT speaker_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
+);
+
 create table LIGHTBULB 
 (_timestamp TIMESTAMP, 
 device_id VARCHAR(20),
