@@ -3,14 +3,10 @@ package vn.edu.hcmut.iotserver.database;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import vn.edu.hcmut.iotserver.DeviceType;
-import vn.edu.hcmut.iotserver.Entities.DeviceMode;
+import vn.edu.hcmut.iotserver.entities.DeviceMode;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static vn.edu.hcmut.iotserver.DeviceType.SENSOR_TEMP;
 
 /**
  * Get data about IoT devices
@@ -38,8 +34,6 @@ public class IoTSensorData {
             for (Object j : jsonArray) {
                 valueString.append(",").append(Integer.valueOf((String) j));
             }
-            System.out.println(deviceType.getDatabase());
-            System.out.println(valueString);
             st.execute("insert into " + deviceType.getDatabase() + " VALUES (" + valueString + ")");
         }
     }

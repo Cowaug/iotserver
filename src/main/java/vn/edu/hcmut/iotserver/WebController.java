@@ -1,9 +1,7 @@
 package vn.edu.hcmut.iotserver;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.hcmut.iotserver.Entities.DeviceMode;
-import vn.edu.hcmut.iotserver.Entities.Permissions;
-import vn.edu.hcmut.iotserver.Entities.User;
+import vn.edu.hcmut.iotserver.entities.DeviceMode;
+import vn.edu.hcmut.iotserver.entities.Permissions;
+import vn.edu.hcmut.iotserver.entities.User;
 import vn.edu.hcmut.iotserver.database.Authentication;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
-import vn.edu.hcmut.iotserver.database.JawMySQL;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
-import static vn.edu.hcmut.iotserver.DeviceType.SENSOR_TEMP;
-import static vn.edu.hcmut.iotserver.Entities.Attributes.*;
-import static vn.edu.hcmut.iotserver.database.IoTSensorData.getDeviceStatus7Day;
+import static vn.edu.hcmut.iotserver.entities.Attributes.*;
 
 @Controller
 public class WebController {

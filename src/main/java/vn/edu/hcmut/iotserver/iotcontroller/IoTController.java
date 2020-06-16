@@ -4,13 +4,11 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import vn.edu.hcmut.iotserver.DeviceType;
-import vn.edu.hcmut.iotserver.Entities.DeviceMode;
+import vn.edu.hcmut.iotserver.entities.DeviceMode;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
 import vn.edu.hcmut.iotserver.mqtt.MQTTPublisher;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * This class is for logical control of the IoT device

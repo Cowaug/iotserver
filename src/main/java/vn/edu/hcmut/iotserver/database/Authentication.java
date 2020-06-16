@@ -1,8 +1,8 @@
 package vn.edu.hcmut.iotserver.database;
 
 import org.apache.commons.codec.binary.Hex;
-import vn.edu.hcmut.iotserver.Entities.Permissions;
-import vn.edu.hcmut.iotserver.Entities.User;
+import vn.edu.hcmut.iotserver.entities.Permissions;
+import vn.edu.hcmut.iotserver.entities.User;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

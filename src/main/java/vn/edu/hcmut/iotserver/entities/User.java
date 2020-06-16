@@ -1,4 +1,4 @@
-package vn.edu.hcmut.iotserver.Entities;
+package vn.edu.hcmut.iotserver.entities;
 
 public class User {
 String userId;

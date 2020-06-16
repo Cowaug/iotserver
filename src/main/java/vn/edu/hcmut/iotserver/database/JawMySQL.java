@@ -1,20 +1,8 @@
 package vn.edu.hcmut.iotserver.database;
 
-import org.apache.commons.codec.binary.Hex;
-import vn.edu.hcmut.iotserver.DeviceType;
-import vn.edu.hcmut.iotserver.Entities.Permissions;
-import vn.edu.hcmut.iotserver.Entities.User;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
-
-import static vn.edu.hcmut.iotserver.DeviceType.*;
 
 public class JawMySQL {
 
