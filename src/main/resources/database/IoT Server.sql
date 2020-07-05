@@ -60,7 +60,7 @@ create table INDICATE_LIGHT_TEST
 (_timestamp TIMESTAMP,
 device_id VARCHAR(20),
 status TINYINT,
-intensity TINYINT,
+intensity SMALLINT,
 
 CONSTRAINT indicate_light_test_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
@@ -101,6 +101,16 @@ operating_time_remain TINYINT,
 CONSTRAINT motor_pk PRIMARY KEY USING BTREE (_timestamp,device_id)
 );
 
+CREATE TABLE `SETTING`(
+`device_key` VARCHAR(5) PRIMARY KEY,
+`device_value` INT
+);
+INSERT INTO `SETTING` VALUES
+('temp',-1),
+('humid',-1),
+('plant',-1),
+('light',-1);
+
 insert into IoT_USERS values
 ('admin2',
 '296d55544f37a33eaec689b0e13a6f9ef726486c717def9727e18b965e8c59ebb3efe7feba2d526c089444b32be5e9dffd1605f2fcfb3868bdd8607fd7cc50b76ffdaf2fe7793a1740f78972b3ec1e0a2e733fb34e16163a630b15b0ef947ebecb3d92c2db69ae70ad24995fe5df4feaee5950dd055de8c10d9a27cccb00aa3e',
@@ -114,4 +124,5 @@ select * from NDICATE_LIGHT;
 select * from LIGHTBULB;
 select * from AIR_CONDITIONER;
 select * from MOTOR;
+select * from SETTING;
 

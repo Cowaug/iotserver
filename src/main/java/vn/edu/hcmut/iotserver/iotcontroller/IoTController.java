@@ -20,9 +20,45 @@ public class IoTController {
     private static int lightThreshold = 650;// default 650 lumen
     private static int plantThreshold = 50;// default 50%
 
+    static {
+        try {
+            int tmp = IoTSensorData.getDefault("temp");
+            if (tmp != -1)
+                temperatureThreshold = tmp;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+            int tmp = IoTSensorData.getDefault("humid");
+            if (tmp != -1)
+                humidityThreshold = tmp;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+            int tmp = IoTSensorData.getDefault("light");
+            if (tmp != -1)
+                lightThreshold = tmp;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+            int tmp = IoTSensorData.getDefault("plant");
+            if (tmp != -1)
+                plantThreshold = tmp;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     public static void processDataAndSendToDevice(DeviceType sensorType, JSONObject payload) throws SQLException {
         //todo control IoT application based on given value
         // sensorValues theo thứ tự trong format payload
+
+//        if (sensorType != DeviceType.Speaker && sensorType != DeviceType.LightD)
+        System.out.println("\n");
+        System.out.println("\u001B[34m <----- " + new String(payload.toString()).replace(" ", ""));
+
 
         IoTSensorData.getMapping((String) payload.get("device_id")).forEach(deviceId -> {
             try {
@@ -159,11 +195,11 @@ public class IoTController {
                 }
 
                 returnJSONObject.put("values", list);
-                System.out.println("\t-----> " + returnJSONObject.toJSONString());
-                MQTTPublisher.sendCommandToIoTDevice("Control/" + deviceId, returnJSONObject);
+//                MQTTPublisher.sendCommandToIoTDevice("Control/" + deviceId, returnJSONObject);
                 MQTTPublisher.sendCommandToIoTDevice("Topic/" + deviceId, returnJSONObject);
-            } catch (MqttException | SQLException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("\t" + e.getMessage());
+//                e.printStackTrace();
             }
         });
     }
@@ -202,6 +238,22 @@ public class IoTController {
      */
     public static void setHumidityThreshold(int humidityThreshold) {
         IoTController.humidityThreshold = humidityThreshold;
+    }
+
+    public static int getTemperatureThreshold() {
+        return temperatureThreshold;
+    }
+
+    public static int getHumidityThreshold() {
+        return humidityThreshold;
+    }
+
+    public static int getLightThreshold() {
+        return lightThreshold;
+    }
+
+    public static int getPlantThreshold() {
+        return plantThreshold;
     }
 
     public static void main(String[] args) throws SQLException {

@@ -10,13 +10,15 @@ import vn.edu.hcmut.iotserver.iotcontroller.IoTController;
 
 import java.sql.SQLException;
 
+import static vn.edu.hcmut.iotserver.IotserverApplication.SERVER_URI;
+
 public class MQTTSubscriber {
     static MqttClient client;
     static MqttConnectOptions MqttConnectOp = new MqttConnectOptions();
 
     static {
         try {
-            client = new MqttClient("ws://52.163.200.209:8083/mqtt", MqttClient.generateClientId());
+            client = new MqttClient(SERVER_URI, MqttClient.generateClientId());
             client.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable throwable) {
@@ -27,31 +29,31 @@ public class MQTTSubscriber {
                 @Override
                 public void messageArrived(String topic, MqttMessage mqttMessage) {
                     try {
-                        System.out.println("<----- " + new String(mqttMessage.getPayload()).replace(" ",""));
+//                        System.out.println("<----- " + new String(mqttMessage.getPayload()).replace(" ",""));
                         Object jsonObject = new JSONParser().parse(new String(mqttMessage.getPayload()));
 
                         if (jsonObject instanceof JSONArray) {
                             ((JSONArray) jsonObject).forEach(object -> {
                                 try {
                                     DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-                                    IoTSensorData.pushToDatabase(deviceType, (JSONObject) object);
+//                                    IoTSensorData.pushToDatabase(deviceType, (JSONObject) object);
                                     IoTController.processDataAndSendToDevice(deviceType, (JSONObject) object);
                                 } catch (IllegalArgumentException argumentException) {
-                                    System.err.println(argumentException.getMessage());
+//                                    System.err.println(argumentException.getMessage());
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+//                                    e.printStackTrace();
                                 }
                             });
                         } else {
                             DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-                            IoTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
+//                            IoTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
                             IoTController.processDataAndSendToDevice(deviceType, (JSONObject) jsonObject);
                         }
 
                     } catch (IllegalArgumentException argumentException) {
-                        System.err.println("\t"+argumentException.getMessage());
+//                        System.err.println("\t"+argumentException.getMessage());
                     } catch (Exception e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
 
                 }
@@ -65,11 +67,11 @@ public class MQTTSubscriber {
             MqttConnectOp.setCleanSession(true);
             MqttConnectOp.setKeepAliveInterval(15);
             client.connect(MqttConnectOp);
-            client.subscribe("Data/#", 1);
+//            client.subscribe("Data/#", 1);
             client.subscribe("Topic/#", 1);
             System.out.println("Listening...");
         } catch (MqttException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

@@ -60,6 +60,7 @@
           <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:2.1" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
           <element id="library" level="project" name="Maven: org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.4" />
+          <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.5" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -77,12 +77,15 @@ public class IoTSensorData {
                         object.put("temperature", resultSet.getInt("temp_value"));
                         object.put("humid", resultSet.getInt("humid_value"));
                         break;
+                    case LightD:
                     case LIGHT_BULB:
                         object.put("light_value", resultSet.getInt("light_value"));
                         break;
+                    case Speaker:
                     case MOTOR:
                         object.put("humid", resultSet.getInt("humid_value"));
                         break;
+
                 }
                 timeAndStatus.add(object);
             }
@@ -113,7 +116,7 @@ public class IoTSensorData {
             Timestamp currentDay = new Timestamp(System.currentTimeMillis());
             sql += " FROM " + deviceType.getDatabase() + " AS D, vuw8gi9vft7kuo7g.SENSOR_DEVICE_INFOS AS SDI, " + deviceType.getDatabase2() + " AS S " +
                     " WHERE  D.device_id = SDI.device_id AND SDI.sensor_id = S.device_id AND DATE_ADD('" + currentDay + "', INTERVAL -6 DAY) <= DATE(D._timestamp) <= '" + currentDay + "' AND D.device_id = '" + deviceId + "' " +
-                    " GROUP BY days "+
+                    " GROUP BY days " +
                     " ORDER BY days";
 
             ResultSet resultSet = st.executeQuery(sql);
@@ -197,7 +200,22 @@ public class IoTSensorData {
     public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2) throws
             SQLException {
         try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = '" + sensorValue1 + "' , sensor_value_2 = '" + sensorValue2 + "' WHERE device_id='" + deviceId + "'");
+            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " WHERE device_id='" + deviceId + "'");
+        }
+    }
+
+    public static void setDefault(String key,int value) throws SQLException {
+        try (Statement st = connection.createStatement()) {
+            st.execute("UPDATE vuw8gi9vft7kuo7g.SETTING SET device_value = " + value + " WHERE device_key='" + key + "'");
+        }
+    }
+
+    public static int getDefault(String key) throws SQLException {
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery("SELECT device_value FROM vuw8gi9vft7kuo7g.SETTING WHERE device_key='" + key + "'");
+            if(rs.next())
+                return rs.getInt("device_value");
+            return -1;
         }
     }
 }

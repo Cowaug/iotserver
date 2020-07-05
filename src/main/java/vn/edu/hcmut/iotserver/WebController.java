@@ -1,5 +1,6 @@
 package vn.edu.hcmut.iotserver;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import vn.edu.hcmut.iotserver.entities.Permissions;
 import vn.edu.hcmut.iotserver.entities.User;
 import vn.edu.hcmut.iotserver.database.Authentication;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
+import vn.edu.hcmut.iotserver.iotcontroller.IoTController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,38 +37,14 @@ public class WebController {
     Object getStatus(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(USER_INFO.toString());
         if (user != null && user.getPermission() == Permissions.ADMIN) {
-            try {
-                JSONParser jsonParser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
-                DeviceType deviceType = DeviceType.valueOf((String) jsonObject.get("device_type"));
-                String deviceId = (String) jsonObject.get("device_type");
-                if (!deviceId.equals("null"))
-                    return IoTSensorData.getDeviceStatus7Day(deviceType, deviceId).toJSONString().getBytes();
-                else
-                    return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-            }
+            return getDeviceStatus(request);
         } else return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/getStatusNoLogin", method = RequestMethod.POST, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Object getStatusNologin(HttpServletRequest request) throws SQLException {
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
-            DeviceType deviceType = DeviceType.valueOf((String) jsonObject.get("device_type"));
-            String deviceId = (String) jsonObject.get("device_name");
-            if (!deviceId.equals(""))
-                return IoTSensorData.getDeviceStatus7Day(deviceType, deviceId).toJSONString().getBytes();
-            else
-                return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
+        return getDeviceStatus(request);
     }
 
     @RequestMapping(value = "/changeSettingNoLogin", method = RequestMethod.POST)
@@ -90,18 +68,83 @@ public class WebController {
         }
     }
 
+    @PostMapping(value = "/getSettingNoLogin", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Object getSettingNoLogin(HttpServletRequest request) throws SQLException {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
+
+            String deviceId = (String) jsonObject.get("device_name");
+
+            JSONObject ret = new JSONObject();
+            Object[] settings = IoTSensorData.getInfo(deviceId);
+            ret.put("mode",settings[0]);
+            ret.put("sensorValue1",settings[1]);
+            ret.put("sensorValue2",settings[2]);
+
+            return ret.toJSONString().getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+    }
+
     @RequestMapping(value = "/setDefaultNoLogin", method = RequestMethod.POST)
     public @ResponseBody
     Object setDefaultNoLogin(HttpServletRequest request) throws SQLException {
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
-            DeviceType deviceType = DeviceType.valueOf((String) jsonObject.get("device_type"));
-            String deviceId = (String) jsonObject.get("device_name");
-            DeviceMode deviceMode = DeviceMode.valueOf(jsonObject.get("mode").toString().toUpperCase());
 
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("humid").toString());
+                IoTSensorData.setDefault("humid", tmp);
+                IoTController.setHumidityThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("light").toString());
+                IoTSensorData.setDefault("light", tmp);
+                IoTController.setLightThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("plant").toString());
+                IoTSensorData.setDefault("plant", tmp);
+                IoTController.setPlantThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("temp").toString());
+                IoTSensorData.setDefault("temp", tmp);
+                IoTController.setTemperatureThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
 
             return new ResponseEntity<>("Succeed", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+    }
+
+
+    @RequestMapping(value = "/getDefaultNoLogin", method = RequestMethod.POST, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Object getDefaultNoLogin(HttpServletRequest request) throws SQLException {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("temp",IoTController.getTemperatureThreshold());
+            jsonObject.put("plant",IoTController.getPlantThreshold());
+            jsonObject.put("light",IoTController.getLightThreshold());
+            jsonObject.put("humid",IoTController.getHumidityThreshold());
+
+            return jsonObject.toJSONString().getBytes();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
@@ -140,23 +183,6 @@ public class WebController {
         return new ResponseEntity<>("Wrong username/password", HttpStatus.BAD_REQUEST);
     }
 
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public Object loginGET(ModelMap modelMap, HttpServletRequest request) {
-        try {
-            // authentication
-            User user = Authentication.login("admin", "admin");
-
-            if (user != null) {
-                request.getSession().setAttribute(USER_INFO.toString(), user);
-                return new ResponseEntity<>("Login success as " + user.getPermission() + " " + user.getUserId(), HttpStatus.OK);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return new ResponseEntity<>("Wrong username/password", HttpStatus.FORBIDDEN);
-    }
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Object registerPOST(ModelMap modelMap, HttpServletRequest request) {
         try {
@@ -170,5 +196,21 @@ public class WebController {
             ex.printStackTrace();
         }
         return new ResponseEntity<>("Register fail, check username and password.", HttpStatus.BAD_REQUEST);
+    }
+
+    Object getDeviceStatus(HttpServletRequest request) {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
+            DeviceType deviceType = DeviceType.valueOf((String) jsonObject.get("device_type"));
+            String deviceId = (String) jsonObject.get("device_name");
+            if (!deviceId.equals(""))
+                return IoTSensorData.getDeviceStatus7Day(deviceType, deviceId).toJSONString().getBytes();
+            else
+                return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
     }
 }

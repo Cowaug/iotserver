@@ -13,6 +13,9 @@ import static vn.edu.hcmut.iotserver.DeviceType.LIGHT_BULB;
 
 @SpringBootApplication
 public class IotserverApplication implements CommandLineRunner {
+//    public static final String SERVER_URI = "ws://52.163.200.209:8083/mqtt";
+//    public static final String SERVER_URI = "ws://52.187.125.59:8083/mqtt";
+    public static final String SERVER_URI = "tcp://52.187.125.59:1883";
 
     public static void main(String[] args) throws MqttException {
         SpringApplication.run(IotserverApplication.class, args);
