@@ -3,6 +3,7 @@ package vn.edu.hcmut.iotserver;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,10 @@ import static vn.edu.hcmut.iotserver.entities.Attributes.*;
 
 @Controller
 public class WebController {
+    @Autowired
+    IoTSensorData ioTSensorData;
+
+
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
         model.addAttribute("name", name);
@@ -207,7 +212,8 @@ public class WebController {
             if (!deviceId.equals(""))
                 return IoTSensorData.getDeviceStatus7Day(deviceType, deviceId).toJSONString().getBytes();
             else
-                return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
+//                return IoTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
+                return ioTSensorData.getNewestDeviceStatus(deviceType).toJSONString().getBytes();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);

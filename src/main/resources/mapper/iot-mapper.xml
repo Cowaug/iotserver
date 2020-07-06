@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IoTMapper">
+
+    <select id="getNewestDeviceStatus" parameterType="java.lang.Object" resultMap="NewestDeviceStatus">
+        select *
+        from ${array[0]} AS D,
+             DEVICE_MODE AS M,
+             SENSOR_DEVICE_INFOS AS SDI,
+             ${array[1]} AS S,
+
+             (select MAX(_timestamp) AS last_update, device_id
+              from ${array[0]}
+              GROUP BY device_id) as DT,
+
+             (select MAX(_timestamp) AS last_sensor_update, device_id
+              from ${array[1]}
+              GROUP BY device_id) as ST
+
+        WHERE D.device_id = DT.device_id
+          AND D._timestamp = DT.last_update
+          AND S.device_id = ST.device_id
+          AND S._timestamp = ST.last_sensor_update
+          AND D.device_id = M.device_id
+          AND D.device_id = SDI.device_id
+          AND SDI.sensor_id = S.device_id;
+    </select>
+
+    <resultMap id="NewestDeviceStatus" type="vn.edu.hcmut.iotserver.models.NewestDeviceStatus">
+        <result property="time" column="_timestamp"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="status" column="status"/>
+        <result property="mode" column="current_mode"/>
+        <result property="temperature" column="temp_value"/>
+        <result property="humid" column="humid_value"/>
+        <result property="lightValue" column="light_value"/>
+    </resultMap>
+
+</mapper>

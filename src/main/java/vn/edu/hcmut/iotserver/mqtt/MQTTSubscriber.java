@@ -36,24 +36,24 @@ public class MQTTSubscriber {
                             ((JSONArray) jsonObject).forEach(object -> {
                                 try {
                                     DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-//                                    IoTSensorData.pushToDatabase(deviceType, (JSONObject) object);
+                                    IoTSensorData.pushToDatabase(deviceType, (JSONObject) object);
                                     IoTController.processDataAndSendToDevice(deviceType, (JSONObject) object);
                                 } catch (IllegalArgumentException argumentException) {
-//                                    System.err.println(argumentException.getMessage());
+                                    System.err.println(argumentException.getMessage());
                                 } catch (Exception e) {
-//                                    e.printStackTrace();
+                                    e.printStackTrace();
                                 }
                             });
                         } else {
                             DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-//                            IoTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
+                            IoTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
                             IoTController.processDataAndSendToDevice(deviceType, (JSONObject) jsonObject);
                         }
 
                     } catch (IllegalArgumentException argumentException) {
-//                        System.err.println("\t"+argumentException.getMessage());
+                        System.err.println("\t"+argumentException.getMessage());
                     } catch (Exception e) {
-//                        e.printStackTrace();
+                        e.printStackTrace();
                     }
 
                 }
