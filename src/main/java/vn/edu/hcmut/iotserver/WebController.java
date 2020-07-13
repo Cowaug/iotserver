@@ -84,7 +84,7 @@ public class WebController {
 
             JSONObject ret = new JSONObject();
             Object[] settings = IoTSensorData.getInfo(deviceId);
-            ret.put("mode",settings[0]);
+            ret.put("mode",settings[0].toString());
             ret.put("sensorValue1",settings[1]);
             ret.put("sensorValue2",settings[2]);
 
