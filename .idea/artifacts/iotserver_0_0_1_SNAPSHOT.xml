@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" build-on-make="true" name="iotserver-0.0.1-SNAPSHOT">
-    <output-path>$PROJECT_DIR$/../New folder</output-path>
-    <root id="archive" name="iotserver-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="IoT Server:war exploded" />
-    </root>
-  </artifact>
-</component>

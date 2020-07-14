@@ -1,6 +1,5 @@
 package vn.edu.hcmut.iotserver;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +62,10 @@ public class WebController {
             DeviceMode deviceMode = DeviceMode.valueOf(jsonObject.get("mode").toString().toUpperCase());
             int sensorValue1 = Integer.valueOf(jsonObject.get("sensorValue1").toString());
             int sensorValue2 = Integer.valueOf(jsonObject.get("sensorValue2").toString());
+            String sheduleOn = jsonObject.get("shedule_on").toString();
+            String scheduleOff = jsonObject.get("shedule_off").toString();
 
-            IoTSensorData.setMode(deviceId, deviceMode, sensorValue1, sensorValue2);
+            IoTSensorData.setMode(deviceId, deviceMode, sensorValue1, sensorValue2,sheduleOn,scheduleOff);
 
             return new ResponseEntity<>("Succeed", HttpStatus.OK);
         } catch (Exception e) {
@@ -83,10 +84,12 @@ public class WebController {
             String deviceId = (String) jsonObject.get("device_name");
 
             JSONObject ret = new JSONObject();
-            Object[] settings = IoTSensorData.getInfo(deviceId);
+            Object[] settings = IoTSensorData.getMode(deviceId);
             ret.put("mode",settings[0].toString());
             ret.put("sensorValue1",settings[1]);
             ret.put("sensorValue2",settings[2]);
+            ret.put("shedule_on",settings[3]);
+            ret.put("shedule_off",settings[4]);
 
             return ret.toJSONString().getBytes();
         } catch (Exception e) {
@@ -130,6 +133,20 @@ public class WebController {
             } catch (Exception ignored) {
 
             }
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("s_on").toString());
+                IoTSensorData.setDefault("schedule_on", tmp);
+                IoTController.setTemperatureThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
+            try {
+                int tmp = Integer.valueOf(jsonObject.get("s_off").toString());
+                IoTSensorData.setDefault("schedule_off", tmp);
+                IoTController.setTemperatureThreshold(tmp);
+            } catch (Exception ignored) {
+
+            }
 
             return new ResponseEntity<>("Succeed", HttpStatus.OK);
         } catch (Exception e) {
@@ -148,6 +165,8 @@ public class WebController {
             jsonObject.put("plant",IoTController.getPlantThreshold());
             jsonObject.put("light",IoTController.getLightThreshold());
             jsonObject.put("humid",IoTController.getHumidityThreshold());
+            jsonObject.put("schedule_on",IoTController.getHumidityThreshold());
+            jsonObject.put("schedule_off",IoTController.getHumidityThreshold());
 
             return jsonObject.toJSONString().getBytes();
         } catch (Exception e) {

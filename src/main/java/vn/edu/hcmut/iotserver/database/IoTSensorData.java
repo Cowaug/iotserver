@@ -198,14 +198,20 @@ public class IoTSensorData  implements WebMvcConfigurer {
      * @return
      * @throws SQLException
      */
-    public static Object[] getInfo(String deviceId) throws SQLException {
+    public static Object[] getMode(String deviceId) throws SQLException {
         try (Statement st = connection.createStatement()) {
             ResultSet resultSet = st.executeQuery("SELECT * FROM DEVICE_MODE WHERE device_id='" + deviceId + "'");
 
             if (resultSet.next()) {
-                return new Object[]{DeviceMode.valueOf(resultSet.getString(2).toUpperCase()), resultSet.getInt(3), resultSet.getInt(4)};
+                return new Object[]{DeviceMode.valueOf(
+                        resultSet.getString("current_mode").toUpperCase()),
+                        resultSet.getInt("sensor_value_1"),
+                        resultSet.getInt("sensor_value_2"),
+                        resultSet.getString("schedule_on"),
+                        resultSet.getString("schedule_off")
+                };
             }
-            return new Object[]{DeviceMode.OFF, -1, -1};
+            return new Object[]{DeviceMode.OFF, -1, -1,"00:00","00:00"};
         }
     }
 
@@ -216,10 +222,10 @@ public class IoTSensorData  implements WebMvcConfigurer {
      * @param mode
      * @throws SQLException
      */
-    public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2) throws
+    public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2, String scheduleOn, String scheduleOff) throws
             SQLException {
         try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " WHERE device_id='" + deviceId + "'");
+            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " , schedule_on = " + scheduleOn + " , schedule_off = " + scheduleOff + " WHERE device_id='" + deviceId + "'");
         }
     }
 
@@ -229,12 +235,12 @@ public class IoTSensorData  implements WebMvcConfigurer {
         }
     }
 
-    public static int getDefault(String key) throws SQLException {
+    public static String getDefault(String key) throws SQLException {
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT device_value FROM vuw8gi9vft7kuo7g.SETTING WHERE device_key='" + key + "'");
             if(rs.next())
-                return rs.getInt("device_value");
-            return -1;
+                return rs.getString("device_value");
+            return "-1";
         }
     }
 }
