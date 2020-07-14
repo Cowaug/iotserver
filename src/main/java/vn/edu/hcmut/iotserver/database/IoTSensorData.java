@@ -44,6 +44,7 @@ public class IoTSensorData  implements WebMvcConfigurer {
             for (Object j : jsonArray) {
                 valueString.append(",").append(Integer.valueOf((String) j));
             }
+            valueString.append(",").append(0);
             st.execute("insert into " + deviceType.getDatabase() + " VALUES (" + valueString + ")");
         }
     }

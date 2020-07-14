@@ -99,6 +99,7 @@ create table SENSOR_TEMP
 `device_id` VARCHAR(20),
 `temp_value` TINYINT,
 `humid_value` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -113,6 +114,7 @@ create table SENSOR_LIGHT
 `_timestamp` TIMESTAMP,
 `device_id` VARCHAR(20),
 `light_value` SMALLINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -126,6 +128,7 @@ create table SENSOR_PLANT
 (`_timestamp` TIMESTAMP,
 `device_id` VARCHAR(20),
 `humid_value` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -140,6 +143,7 @@ create table INDICATE_LIGHT
 `_timestamp` TIMESTAMP,
 `device_id` VARCHAR(20),
 `color` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -155,6 +159,7 @@ create table LIGHTD
 `device_id` VARCHAR(20),
 `status` TINYINT,
 `intensity` SMALLINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -169,6 +174,7 @@ create table SPEAKER
 `device_id` VARCHAR(20),
 `status` TINYINT,
 `intensity` SMALLINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -182,6 +188,7 @@ create table LIGHTBULB
 (`_timestamp` TIMESTAMP, 
 `device_id` VARCHAR(20),
 `status` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -196,6 +203,7 @@ create table AIR_CONDITIONER
 `device_id` VARCHAR(20),
 `status` TINYINT,
 `operating_temp` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -211,6 +219,7 @@ create table MOTOR
 `status` TINYINT,
 `operating_capacity` TINYINT,
 `operating_time_remain` TINYINT,
+`grouped` TINYINT,
 
 PRIMARY KEY (_timestamp,device_id)
 );
@@ -219,18 +228,7 @@ PRIMARY KEY (_timestamp,device_id)
 --
 --
 -- ADDING VALUE OF SENSORS, DEVICES FOR QUERY TESTING
-truncate table SENSOR_TEMP;insert into SENSOR_TEMP values ('2020-07-14 18:33:10', 'sensor_temp_1', 27, 55),('2020-07-14 18:33:10', 'sensor_temp_2', 24, 26),('2020-07-14 18:33:00', 'sensor_temp_1', 20, 
-22),('2020-07-14 18:33:00', 'sensor_temp_2', 23, 56);
-truncate table SENSOR_LIGHT;insert into SENSOR_LIGHT values ('2020-07-14 18:33:10', 'sensor_light_1', 771),('2020-07-14 18:33:10', 'sensor_light_2', 552),('2020-07-14 18:33:10', 'Light', 775),('2020-07-14 18:33:00', 'sensor_light_1', 496),('2020-07-14 18:33:00', 'sensor_light_2', 633),('2020-07-14 18:33:00', 'Light', 594);
-truncate table SENSOR_PLANT;insert into SENSOR_PLANT values ('2020-07-14 18:33:10', 'sensor_plant_1', 42),('2020-07-14 18:33:10', 'sensor_plant_2', 73),('2020-07-14 18:33:10', 'Mois', 70),('2020-07-14 
-18:33:00', 'sensor_plant_1', 71),('2020-07-14 18:33:00', 'sensor_plant_2', 50),('2020-07-14 18:33:00', 'Mois', 44);
-truncate table INDICATE_LIGHT;insert into INDICATE_LIGHT values ('2020-07-14 18:33:10', 'indicate_light_1', 2),('2020-07-14 18:33:10', 'indicate_light_2', 1),('2020-07-14 18:33:00', 'indicate_light_1', 2),('2020-07-14 18:33:00', 'indicate_light_2', 2);
-truncate table LIGHTBULB;insert into LIGHTBULB values ('2020-07-14 18:33:10', 'lightbulb_1', 1),('2020-07-14 18:33:10', 'lightbulb_2', 0),('2020-07-14 18:33:10', 'lightbulb_3', 0),('2020-07-14 18:33:10', 'lightbulb_4', 1),('2020-07-14 18:33:00', 'lightbulb_1', 0),('2020-07-14 18:33:00', 'lightbulb_2', 0),('2020-07-14 18:33:00', 'lightbulb_3', 1),('2020-07-14 18:33:00', 'lightbulb_4', 0);
-truncate table AIR_CONDITIONER;insert into AIR_CONDITIONER values ('2020-07-14 18:33:10', 'air_conditioner_1', 1, 16),('2020-07-14 18:33:10', 'air_conditioner_2', 0, 17),('2020-07-14 18:33:00', 'air_conditioner_1', 1, 23),('2020-07-14 18:33:00', 'air_conditioner_2', 0, 19);
-truncate table MOTOR;insert into MOTOR values ('2020-07-14 18:33:10', 'motor_1', 0, 24, 6),('2020-07-14 18:33:10', 'motor_2', 0, 26, 7),('2020-07-14 18:33:00', 'motor_1', 1, 29, 8),('2020-07-14 18:33:00', 'motor_2', 1, 24, 10);
-truncate table SPEAKER;insert into SPEAKER values ('2020-07-14 18:33:10', 'Speaker', 0, 105),('2020-07-14 18:33:00', 'Speaker', 1, 106);
-truncate table LIGHTD;insert into LIGHTD values ('2020-07-14 18:33:10', 'LightD', 1, 109),('2020-07-14 18:33:00', 'LightD', 1, 135);
-
+-- Run Generated File
 
 --
 --
