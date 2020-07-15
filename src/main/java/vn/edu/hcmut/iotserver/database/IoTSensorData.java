@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.entities.DeviceMode;
 import vn.edu.hcmut.iotserver.models.NewestDeviceStatus;
@@ -141,6 +140,7 @@ public class IoTSensorData {
                     sql += "SELECT DATE(S._timestamp) AS days, AVG(S.temp_value), AVG(S.humid_value) ";
                     break;
                 case LightD:
+                case LIGHTBULB:
                 case LIGHT_BULB:
                     sql += "SELECT DATE(S._timestamp) AS days, AVG(S.light_value)";
 
@@ -172,6 +172,7 @@ public class IoTSensorData {
                         object.put("humid", resultSet.getInt(3));
                         break;
                     case LightD:
+                    case LIGHTBULB:
                     case LIGHT_BULB:
                         object.put("time", resultSet.getDate(1).getTime());
                         object.put("intensity", resultSet.getInt(2));

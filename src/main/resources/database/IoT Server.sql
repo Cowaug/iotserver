@@ -241,20 +241,20 @@ FROM information_schema.tables
 GROUP BY table_schema; 
 
 select * from vuw8gi9vft7kuo7g.IoT_USERS;
-select * from SENSOR_TEMP;
-select * from SENSOR_LIGHT;
-select * from SENSOR_PLANT;
-select * from INDICATE_LIGHT;
-select * from LIGHTBULB;
-select * from AIR_CONDITIONER;
-select * from SPEAKER;
-select * from LIGHTD;
-select * from MOTOR;
-select * from SETTING;
-select * from DEVICE_INFO;
-select * from DEVICE_MODE;
-select * from SENSOR_DEVICE_INFOS;
+select * from SENSOR_TEMP order by 1 desc;
+select * from SENSOR_LIGHT order by 1 desc;
+select * from SENSOR_PLANT order by 1 desc;
+select * from INDICATE_LIGHT order by 1 desc;
+select * from LIGHTBULB order by 1 desc;
+select * from AIR_CONDITIONER order by 1 desc;
+select * from LIGHTD order by 1 desc;
+select * from MOTOR order by 1 desc;
+select * from SETTING order by 1 desc;
+select * from SPEAKER order by 1 desc;
 
+select * from DEVICE_MODE order by 1 desc;
+select * from SENSOR_DEVICE_INFOS order by 1 desc;
+select * from DEVICE_INFO order by 1 desc;
 
 select *
         from AIR_CONDITIONER AS D,

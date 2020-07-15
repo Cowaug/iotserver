@@ -75,9 +75,10 @@ public class IoTController {
         // sensorValues theo thứ tự trong format payload
 
 //        if (sensorType != DeviceType.Speaker && sensorType != DeviceType.LightD)
-        System.out.println("\n");
-        System.out.println("\u001B[34m <----- " + new String(payload.toString()).replace(" ", ""));
-
+//        System.out.println("\n");
+//        System.out.println("\u001B[34m <----- " + new String(payload.toString()).replace(" ", ""));
+        System.out.println();
+        System.out.print("Recieved "+new String(payload.toString()).replace(" ", ""));
 
         IoTSensorData.getMapping((String) payload.get("device_id")).forEach(deviceId -> {
             try {
@@ -88,6 +89,9 @@ public class IoTController {
                 DeviceMode deviceMode = (DeviceMode) deviceControlInfo[0];
                 int sensorValue1 = (int) deviceControlInfo[1];
                 int sensorValue2 = (int) deviceControlInfo[2];
+                String schOn = (String) deviceControlInfo[3];
+                String schOff = (String) deviceControlInfo[4];
+                
 
                 JSONArray array = (JSONArray) payload.get("values");
                 JSONArray list = new JSONArray();
@@ -100,8 +104,8 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                Integer.valueOf((String) array.get(0)) < compareThreshold ||
-                                deviceMode == DeviceMode.SCHEDULE && activation()) {
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold ||
+                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                             list.add("50");
                             list.add("15");
@@ -121,8 +125,8 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                Integer.valueOf((String) array.get(0)) < compareThreshold1 ||
-                                deviceMode == DeviceMode.SCHEDULE && activation()) {
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold1 ||
+                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                             list.add("27");
                         } else {
@@ -138,8 +142,8 @@ public class IoTController {
                         if (deviceMode == DeviceMode.OFF) {
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                Integer.valueOf((String) array.get(0)) < compareThreshold ||
-                                deviceMode == DeviceMode.SCHEDULE && activation()) {
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold ||
+                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                         } else {
                             list.add("0");
@@ -154,8 +158,8 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                Integer.valueOf((String) array.get(0)) < compareThreshold ||
-                                deviceMode == DeviceMode.SCHEDULE && activation()) {
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold ||
+                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                             list.add("1000");
 
@@ -175,8 +179,8 @@ public class IoTController {
 //                            list.add("0");
 //                            list.add("0");
 //                        } else if (deviceMode == DeviceMode.ON ||
-//                                Integer.valueOf((String) array.get(0)) < compareThreshold1||
-//                                deviceMode == DeviceMode.SCHEDULE&&activation()) {
+//                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold1||
+//                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
 //                            list.add("1");
 //                            list.add("128");
 //                        } else {
@@ -193,8 +197,8 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                Integer.valueOf((String) array.get(0)) < compareThreshold ||
-                                deviceMode == DeviceMode.SCHEDULE && activation()) {
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold ||
+                                deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                             list.add("255");
                         } else {
@@ -205,12 +209,17 @@ public class IoTController {
                     break;
 
                     default:
+                        System.out.println("No device found!");
                         return;
                 }
 
                 returnJSONObject.put("values", list);
 //                MQTTPublisher.sendCommandToIoTDevice("Control/" + deviceId, returnJSONObject);
-                MQTTPublisher.sendCommandToIoTDevice("Topic/" + deviceId, returnJSONObject);
+                if(deviceId.contains("_"))
+                MQTTPublisher.sendCommandToIoTDevice("Topic/" + deviceId.substring(0,deviceId.lastIndexOf("_")).toUpperCase(), returnJSONObject);
+                else
+                    MQTTPublisher.sendCommandToIoTDevice("Topic/" + deviceId, returnJSONObject);
+
             } catch (Exception e) {
                 System.out.println("\t" + e.getMessage());
 //                e.printStackTrace();
@@ -270,7 +279,7 @@ public class IoTController {
         return plantThreshold;
     }
 
-    private static boolean activation() {
+    private static boolean activation(String scheduleOn, String scheduleOff) {
         Date date = new Date(System.currentTimeMillis());   // given date
         Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
         calendar.setTime(date);   // assigns calendar to given date
@@ -287,16 +296,25 @@ public class IoTController {
 
         boolean active = false;
 
-        if (currentHour < schOffHour && currentHour > schOnHour ||
-                currentHour == schOffHour && currentMinute < schOffMinute ||
-                currentHour == schOnHour && currentMinute > schOnMinute)
+        if (schOnHour > schOffHour ||
+                schOffHour == schOnHour && schOnMinute > schOffMinute) {
             active = true;
 
-        if (schOnHour > schOffHour ||
-                schOffHour == schOnHour && schOnMinute > schOffMinute)
+            schOn = scheduleOff.split(":");
+            schOnHour = Integer.valueOf(schOn[0]);
+            schOnMinute = Integer.valueOf(schOn[1]);
+
+            schOff = scheduleOn.split(":");
+            schOffHour = Integer.valueOf(schOff[0]);
+            schOffMinute = Integer.valueOf(schOff[1]);
+        }
+        if (currentHour < schOffHour && currentHour > schOnHour ||
+                schOnHour != schOffHour && currentHour == schOffHour && currentMinute < schOffMinute ||
+                schOnHour != schOffHour && currentHour == schOnHour && currentMinute >= schOnMinute ||
+                schOnHour == schOffHour && currentMinute < schOffMinute && currentMinute >= schOnMinute
+        )
             active = !active;
 
-        System.out.println(date.toString());
         return active;
     }
 

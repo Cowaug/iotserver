@@ -15,6 +15,7 @@ public class MQTTPublisher {
     static MqttClient client;
     static MqttConnectOptions mqttConnectOp = new MqttConnectOptions();
     static {
+        System.out.println("Publishing to MQTT server...");
         try {
             client = new MqttClient(SERVER_URI, MqttClient.generateClientId());
             mqttConnectOp.setAutomaticReconnect(true);
@@ -24,13 +25,16 @@ public class MQTTPublisher {
         } catch (MqttException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("Published!");
     }
     public static void sendCommandToIoTDevice(String topic, JSONObject command) throws MqttException {
         JSONArray jsonArray = new JSONArray();
         jsonArray.add(command);
 
-        System.out.println("\t \u001B[32m -----> " + jsonArray.toJSONString());
-        System.out.println("\n");
+//        System.out.println("\t \u001B[32m -----> " + jsonArray.toJSONString());
+//        System.out.println("\n");
+
+        System.out.print(" Sent " + command);
 
         MqttMessage message = new MqttMessage(jsonArray.toJSONString().getBytes());
         message.setQos(1);
