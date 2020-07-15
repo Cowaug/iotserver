@@ -28,6 +28,10 @@
           AND SDI.sensor_id = S.device_id;
     </select>
 
+    <insert id="pushToDatabase" parameterType="java.lang.Object">
+        insert into ${array[0]} values (${array[1]});
+    </insert>
+
     <resultMap id="NewestDeviceStatus" type="vn.edu.hcmut.iotserver.models.NewestDeviceStatus">
         <result property="time" column="_timestamp"/>
         <result property="deviceId" column="device_id"/>
@@ -37,5 +41,104 @@
         <result property="humid" column="humid_value"/>
         <result property="lightValue" column="light_value"/>
     </resultMap>
+
+    <insert id="groupSensorTemp" parameterType="java.lang.Object">
+        INSERT INTO SENSOR_TEMP
+        SELECT subtable._timestamp,
+        subtable.device_id,
+        avg(subtable.temp_value),
+        avg(subtable.humid_value),
+        1 AS grouped
+        FROM
+        (
+            SELECT CONCAT(
+            DATE(_timestamp), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(_timestamp) DIV ${array[1]}) * ${array[1]}
+            ), '%H:%i:%s')
+        ) as _timestamp,
+        device_id,
+        temp_value,
+        humid_value
+        FROM SENSOR_TEMP
+        WHERE grouped = 0 and
+        _timestamp &lt; CONCAT(
+            DATE(#{array[0]}), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(#{array[0]}) DIV ${array[1]}) * ${array[1]}
+            ), '%H:%i:%s'))
+        ) AS subtable
+        GROUP BY _timestamp, device_id;
+    </insert>
+
+    <insert id="groupSensorLight" parameterType="java.lang.Object">
+        INSERT INTO SENSOR_LIGHT
+        SELECT subtable._timestamp,
+        subtable.device_id,
+        avg(subtable.light_value),
+        1 AS grouped
+        FROM
+        (
+            SELECT CONCAT(
+            DATE(_timestamp), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(_timestamp) DIV ${array[1]} ) * ${array[1]}
+            ), '%H:%i:%s')
+        ) as _timestamp,
+        device_id,
+        light_value
+        FROM SENSOR_LIGHT
+        WHERE grouped = 0 and
+        _timestamp &lt; CONCAT(
+            DATE(#{array[0]}), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(#{array[0]}) DIV ${array[1]}) * ${array[1]}
+            ), '%H:%i:%s'))
+        ) AS subtable
+        GROUP BY _timestamp, device_id;
+    </insert>
+
+    <insert id="groupSensorPlant" parameterType="java.lang.Object">
+        INSERT INTO SENSOR_PLANT
+        SELECT subtable._timestamp,
+        subtable.device_id,
+        avg(subtable.humid_value),
+        1 AS grouped
+        FROM
+        (
+            SELECT CONCAT(
+            DATE(_timestamp), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(_timestamp) DIV ${array[1]}) * ${array[1]}
+            ), '%H:%i:%s')
+        ) as _timestamp,
+        device_id,
+        humid_value
+        FROM SENSOR_PLANT
+        WHERE grouped = 0 and
+        _timestamp &lt; CONCAT(
+            DATE(#{array[0]}), " ",
+            TIME_FORMAT(
+            SEC_TO_TIME(
+            (TIME_TO_SEC(#{array[0]}) DIV ${array[1]}) * ${array[1]}
+            ), '%H:%i:%s'))
+        ) AS subtable
+        GROUP BY _timestamp, device_id;
+    </insert>
+
+    <delete id="deleteOldRecord" parameterType="java.lang.Object">
+        DELETE FROM ${array[0]} WHERE _timestamp &lt; CONCAT(
+        DATE(#{array[1]}), " ",
+        TIME_FORMAT(
+        SEC_TO_TIME(
+        (TIME_TO_SEC(#{array[1]}) DIV ${array[2]}) * ${array[2]}
+        ), '%H:%i:%s'))
+        and grouped = 0;
+    </delete>
 
 </mapper>

@@ -13,7 +13,7 @@ import static vn.edu.hcmut.iotserver.DeviceType.LIGHT_BULB;
 
 @SpringBootApplication
 public class IotserverApplication implements CommandLineRunner {
-    public static final String SERVER_URI = "ws://52.163.200.209:8083/mqtt";
+    public static final String SERVER_URI = "ws://52.163.209.230:8083/mqtt";
 //    public static final String SERVER_URI = "ws://52.187.125.59:8083/mqtt";
 //    public static final String SERVER_URI = "tcp://52.187.125.59:1883";
 
@@ -24,6 +24,6 @@ public class IotserverApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         JawMySQL.init();
-        MQTTSubscriber.init();
+        new MQTTPublisher();
     }
 }

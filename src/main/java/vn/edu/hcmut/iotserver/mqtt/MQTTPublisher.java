@@ -10,6 +10,8 @@ import org.json.simple.JSONObject;
 import static vn.edu.hcmut.iotserver.IotserverApplication.SERVER_URI;
 
 public class MQTTPublisher {
+    public MQTTPublisher(){}
+
     static MqttClient client;
     static MqttConnectOptions mqttConnectOp = new MqttConnectOptions();
     static {

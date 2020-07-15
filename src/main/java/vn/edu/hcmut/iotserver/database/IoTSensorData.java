@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.entities.DeviceMode;
@@ -18,9 +19,13 @@ import java.util.List;
  * Get data about IoT devices
  */
 @Repository
-public class IoTSensorData  implements WebMvcConfigurer {
+public class IoTSensorData {
     @Autowired
     SqlSession sqlSession;
+
+    long lastCleanUpCheckPoint = 0;
+
+    final int GROUP_INTERVAL = 60 * 60; // minutes
 
     static Connection connection = JawMySQL.getConnection();
 
@@ -31,9 +36,10 @@ public class IoTSensorData  implements WebMvcConfigurer {
      * @param payload    JSON Object received from server
      * @throws SQLException .
      */
-    public static void pushToDatabase(DeviceType deviceType, JSONObject payload) throws SQLException {
-        try (Statement st = connection.createStatement()) {
+    @Transactional
+    public void pushToDatabase(DeviceType deviceType, JSONObject payload){
             Timestamp sqlTimestamp = new Timestamp(System.currentTimeMillis());
+
             StringBuilder valueString = new StringBuilder();
             valueString
                     .append("'").append(sqlTimestamp).append("'")
@@ -45,9 +51,20 @@ public class IoTSensorData  implements WebMvcConfigurer {
                 valueString.append(",").append(Integer.valueOf((String) j));
             }
             valueString.append(",").append(0);
-            st.execute("insert into " + deviceType.getDatabase() + " VALUES (" + valueString + ")");
-        }
+            sqlSession.insert("IoTMapper.pushToDatabase", new Object[]{deviceType.getDatabase(),valueString});
+
+            if(System.currentTimeMillis() - lastCleanUpCheckPoint > 10*60*1000)
+            {
+                sqlSession.insert("IoTMapper.groupSensorTemp", new Object[]{sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.insert("IoTMapper.groupSensorLight", new Object[]{sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.insert("IoTMapper.groupSensorPlant", new Object[]{sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_TEMP.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_LIGHT.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_PLANT.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                lastCleanUpCheckPoint = System.currentTimeMillis();
+            }
     }
+
 
     /**
      * Get current status of all devices (exclude sensor)
@@ -226,7 +243,7 @@ public class IoTSensorData  implements WebMvcConfigurer {
     public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2, String scheduleOn, String scheduleOff) throws
             SQLException {
         try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " , schedule_on = " + scheduleOn + " , schedule_off = " + scheduleOff + " WHERE device_id='" + deviceId + "'");
+            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " , schedule_on = '" + scheduleOn + "' , schedule_off = '" + scheduleOff + "' WHERE device_id='" + deviceId + "'");
         }
     }
 

@@ -4,6 +4,8 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
 import vn.edu.hcmut.iotserver.iotcontroller.IoTController;
@@ -12,12 +14,17 @@ import java.sql.SQLException;
 
 import static vn.edu.hcmut.iotserver.IotserverApplication.SERVER_URI;
 
+@Service
 public class MQTTSubscriber {
-    static MqttClient client;
-    static MqttConnectOptions MqttConnectOp = new MqttConnectOptions();
+    @Autowired
+    IoTSensorData ioTSensorData;
 
-    static {
+    MqttClient client;
+    MqttConnectOptions MqttConnectOp = new MqttConnectOptions();
+
+    {
         try {
+            System.out.println("Connecting to MQTT Server...");
             client = new MqttClient(SERVER_URI, MqttClient.generateClientId());
             client.setCallback(new MqttCallback() {
                 @Override
@@ -36,7 +43,7 @@ public class MQTTSubscriber {
                             ((JSONArray) jsonObject).forEach(object -> {
                                 try {
                                     DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-                                    IoTSensorData.pushToDatabase(deviceType, (JSONObject) object);
+                                    ioTSensorData.pushToDatabase(deviceType, (JSONObject) object);
                                     IoTController.processDataAndSendToDevice(deviceType, (JSONObject) object);
                                 } catch (IllegalArgumentException argumentException) {
                                     System.err.println(argumentException.getMessage());
@@ -46,12 +53,12 @@ public class MQTTSubscriber {
                             });
                         } else {
                             DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
-                            IoTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
+                            ioTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
                             IoTController.processDataAndSendToDevice(deviceType, (JSONObject) jsonObject);
                         }
 
                     } catch (IllegalArgumentException argumentException) {
-                        System.err.println("\t"+argumentException.getMessage());
+                        System.err.println("\t" + argumentException.getMessage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -73,9 +80,5 @@ public class MQTTSubscriber {
         } catch (MqttException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-
-    public static void init() {
     }
 }

@@ -62,8 +62,8 @@ public class WebController {
             DeviceMode deviceMode = DeviceMode.valueOf(jsonObject.get("mode").toString().toUpperCase());
             int sensorValue1 = Integer.valueOf(jsonObject.get("sensorValue1").toString());
             int sensorValue2 = Integer.valueOf(jsonObject.get("sensorValue2").toString());
-            String sheduleOn = jsonObject.get("shedule_on").toString();
-            String scheduleOff = jsonObject.get("shedule_off").toString();
+            String sheduleOn = jsonObject.get("schedule_on").toString();
+            String scheduleOff = jsonObject.get("schedule_off").toString();
 
             IoTSensorData.setMode(deviceId, deviceMode, sensorValue1, sensorValue2,sheduleOn,scheduleOff);
 
