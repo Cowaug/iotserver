@@ -234,6 +234,13 @@ public class IoTSensorData {
         }
     }
 
+//    public Object[] getMode(String deviceId) throws SQLException {
+//        Object o =  sqlSession.selectOne("IoTServer.getMode", deviceId);
+//        System.out.println(o);
+//
+//        return new Object[]{DeviceMode.OFF, -1, -1,"00:00","00:00"};
+//    }
+
     /**
      * Set operating mode of the device
      *
@@ -241,17 +248,25 @@ public class IoTSensorData {
      * @param mode
      * @throws SQLException
      */
-    public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2, String scheduleOn, String scheduleOff) throws
-            SQLException {
-        try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " , schedule_on = '" + scheduleOn + "' , schedule_off = '" + scheduleOff + "' WHERE device_id='" + deviceId + "'");
-        }
+    public void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2, String scheduleOn, String scheduleOff) {
+        sqlSession.update("IoTMapper.setMode", new Object[]{deviceId,mode,sensorValue1,sensorValue2,scheduleOn,scheduleOff});
     }
 
-    public static void setDefault(String key,int value) throws SQLException {
-        try (Statement st = connection.createStatement()) {
-            st.execute("UPDATE vuw8gi9vft7kuo7g.SETTING SET device_value = " + value + " WHERE device_key='" + key + "'");
-        }
+//    public static void setMode(String deviceId, DeviceMode mode, int sensorValue1, int sensorValue2, String scheduleOn, String scheduleOff) throws
+//            SQLException {
+//        try (Statement st = connection.createStatement()) {
+//            st.execute("UPDATE vuw8gi9vft7kuo7g.DEVICE_MODE SET current_mode = '" + mode.toString() + "' , sensor_value_1 = " + sensorValue1 + " , sensor_value_2 = " + sensorValue2 + " , schedule_on = '" + scheduleOn + "' , schedule_off = '" + scheduleOff + "' WHERE device_id='" + deviceId + "'");
+//        }
+//    }
+
+
+//    public static void setDefault(String key,int value) throws SQLException {
+//        try (Statement st = connection.createStatement()) {
+//            st.execute("UPDATE vuw8gi9vft7kuo7g.SETTING SET device_value = " + value + " WHERE device_key='" + key + "'");
+//        }
+//    }
+    public void setDefault(String key,int value){
+        sqlSession.update("IoTMapper.setDefault", new Object[]{key,value});
     }
 
     public static String getDefault(String key) throws SQLException {
