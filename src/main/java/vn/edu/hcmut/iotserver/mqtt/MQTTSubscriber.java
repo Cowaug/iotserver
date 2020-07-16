@@ -10,14 +10,15 @@ import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
 import vn.edu.hcmut.iotserver.iotcontroller.IoTController;
 
-import java.sql.SQLException;
-
 import static vn.edu.hcmut.iotserver.IotserverApplication.SERVER_URI;
 
 @Service
 public class MQTTSubscriber {
     @Autowired
     IoTSensorData ioTSensorData;
+
+    @Autowired
+    IoTController ioTController;
 
     MqttClient client;
     MqttConnectOptions MqttConnectOp = new MqttConnectOptions();
@@ -44,7 +45,7 @@ public class MQTTSubscriber {
                                 try {
                                     DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
                                     ioTSensorData.pushToDatabase(deviceType, (JSONObject) object);
-                                    IoTController.processDataAndSendToDevice(deviceType, (JSONObject) object);
+                                    ioTController.processDataAndSendToDevice(deviceType, (JSONObject) object);
                                 } catch (IllegalArgumentException argumentException) {
                                     System.err.println(argumentException.getMessage());
                                 } catch (Exception e) {
@@ -54,7 +55,7 @@ public class MQTTSubscriber {
                         } else {
                             DeviceType deviceType = DeviceType.valueOf(topic.split("/")[1]);
                             ioTSensorData.pushToDatabase(deviceType, (JSONObject) jsonObject);
-                            IoTController.processDataAndSendToDevice(deviceType, (JSONObject) jsonObject);
+                            ioTController.processDataAndSendToDevice(deviceType, (JSONObject) jsonObject);
                         }
 
                     } catch (IllegalArgumentException argumentException) {

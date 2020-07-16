@@ -4,6 +4,16 @@
 
 <mapper namespace="IoTMapper">
 
+    <resultMap id="NewestDeviceStatus" type="vn.edu.hcmut.iotserver.models.NewestDeviceStatus">
+        <result property="time" column="_timestamp"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="status" column="status"/>
+        <result property="mode" column="current_mode"/>
+        <result property="temperature" column="temp_value"/>
+        <result property="humid" column="humid_value"/>
+        <result property="lightValue" column="light_value"/>
+    </resultMap>
+
     <select id="getNewestDeviceStatus" parameterType="java.lang.Object" resultMap="NewestDeviceStatus">
         select *
         from ${array[0]} AS D,
@@ -28,10 +38,22 @@
           AND SDI.sensor_id = S.device_id;
     </select>
 
+
+
+
     <insert id="pushToDatabase" parameterType="java.lang.Object">
         insert into ${array[0]}
         values (${array[1]});
     </insert>
+
+
+    <select id="getMapping" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT *
+        FROM SENSOR_DEVICE_INFOS
+        WHERE sensor_id= #{sensorId}
+    </select>
+
+
 
     <update id="setMode" parameterType="java.lang.Object">
         UPDATE DEVICE_MODE
@@ -43,33 +65,35 @@
         WHERE device_id = #{array[0]}
     </update>
 
+    <resultMap id="DeviceMode" type="vn.edu.hcmut.iotserver.models.DeviceMode">
+        <result property="mode" column="current_mode"/>
+        <result property="sensor1" column="sensor_value_1"/>
+        <result property="sensor2" column="sensor_value_2"/>
+        <result property="schOn" column="schedule_on"/>
+        <result property="schOff" column="schedule_off"/>
+    </resultMap>
+
+    <select id="getMode" parameterType="java.lang.String" resultMap="DeviceMode">
+        SELECT current_mode,sensor_value_1,sensor_value_2,schedule_on,schedule_off
+        FROM DEVICE_MODE
+        WHERE device_id= #{deviceId}
+    </select>
+
+
+
     <update id="setDefault" parameterType="java.lang.Object">
         UPDATE SETTING
         SET device_value = ${array[1]}
         WHERE device_key= #{array[0]}
     </update>
 
-    <select id="getMode" parameterType="java.lang.String" resultType="java.lang.Object">
-        SELECT *
-        FROM DEVICE_MODE
-        WHERE device_id= #{deviceId}
-    </select>
-
-    <select id="getDefault" parameterType="java.lang.String">
+    <select id="getDefault" resultType="java.lang.String">
         SELECT device_value
         FROM SETTING
         WHERE device_key= #{key}
     </select>
 
-    <resultMap id="NewestDeviceStatus" type="vn.edu.hcmut.iotserver.models.NewestDeviceStatus">
-        <result property="time" column="_timestamp"/>
-        <result property="deviceId" column="device_id"/>
-        <result property="status" column="status"/>
-        <result property="mode" column="current_mode"/>
-        <result property="temperature" column="temp_value"/>
-        <result property="humid" column="humid_value"/>
-        <result property="lightValue" column="light_value"/>
-    </resultMap>
+
 
     <insert id="groupSensorTemp" parameterType="java.lang.Object">
         INSERT INTO SENSOR_TEMP

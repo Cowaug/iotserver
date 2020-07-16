@@ -2,6 +2,9 @@ package vn.edu.hcmut.iotserver.iotcontroller;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.entities.DeviceMode;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
@@ -16,61 +19,59 @@ import java.util.GregorianCalendar;
  * This class is for logical control of the IoT device
  * After process data, it will send the data back to the MQTT server by calling methods from MQTTConnection class
  */
+@Repository
 public class IoTController {
-    private static int temperatureThreshold = 27; // default is 27 Celsius
-    private static int humidityThreshold = 70;// default is 70 percent
-    private static int lightThreshold = 650;// default 650 lumen
-    private static int plantThreshold = 50;// default 50%
-    private static String scheduleOn = "00:00";
-    private static String scheduleOff = "00:00";
 
-    static {
-        try {
-            int tmp = Integer.valueOf(IoTSensorData.getDefault("temp"));
+    IoTSensorData ioTSensorData;
+    
+    private int temperatureThreshold = 27; // default is 27 Celsius
+    private int humidityThreshold = 70;// default is 70 percent
+    private int lightThreshold = 650;// default 650 lumen
+    private int plantThreshold = 50;// default 50%
+    private String scheduleOn = "00:00";
+    private String scheduleOff = "00:00";
+
+    @Autowired
+    public IoTController(IoTSensorData ioTSensorData){
+        this.ioTSensorData = ioTSensorData;
+        {
+            int tmp = Integer.valueOf(ioTSensorData.getDefault("temp"));
             if (tmp != -1)
                 temperatureThreshold = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        try {
-            int tmp = Integer.valueOf(IoTSensorData.getDefault("humid"));
+        {
+            int tmp = Integer.valueOf(ioTSensorData.getDefault("humid"));
             if (tmp != -1)
                 humidityThreshold = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        try {
-            int tmp = Integer.valueOf(IoTSensorData.getDefault("light"));
+        {
+            int tmp = Integer.valueOf(ioTSensorData.getDefault("light"));
             if (tmp != -1)
                 lightThreshold = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        try {
-            int tmp = Integer.valueOf(IoTSensorData.getDefault("plant"));
+
+        {
+            int tmp = Integer.valueOf(ioTSensorData.getDefault("plant"));
             if (tmp != -1)
                 plantThreshold = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        try {
-            String tmp = IoTSensorData.getDefault("s_on");
+
+        {
+            String tmp = ioTSensorData.getDefault("s_on");
             if (!tmp.equals("-1"))
                 scheduleOn = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        try {
-            String tmp = IoTSensorData.getDefault("s_off");
+
+        {
+            String tmp = ioTSensorData.getDefault("s_off");
             if (!tmp.equals("-1"))
                 scheduleOff = tmp;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
+
     }
 
 
-    public static void processDataAndSendToDevice(DeviceType sensorType, JSONObject payload) throws SQLException {
+    public void processDataAndSendToDevice(DeviceType sensorType, JSONObject payload) throws SQLException {
         //todo control IoT application based on given value
         // sensorValues theo thứ tự trong format payload
 
@@ -80,13 +81,13 @@ public class IoTController {
         System.out.println();
         System.out.print("Recieved "+new String(payload.toString()).replace(" ", ""));
 
-        IoTSensorData.getMapping((String) payload.get("device_id")).forEach(deviceId -> {
+        ioTSensorData.getMapping((String) payload.get("device_id")).forEach(deviceId -> {
             try {
                 JSONObject returnJSONObject = new JSONObject();
                 returnJSONObject.put("device_id", deviceId);
 
-                Object[] deviceControlInfo = IoTSensorData.getMode(deviceId);
-                DeviceMode deviceMode = (DeviceMode) deviceControlInfo[0];
+                Object[] deviceControlInfo = ioTSensorData.getMode(deviceId);
+                DeviceMode deviceMode = DeviceMode.valueOf( (String) deviceControlInfo[0]);
                 int sensorValue1 = (int) deviceControlInfo[1];
                 int sensorValue2 = (int) deviceControlInfo[2];
                 String schOn = (String) deviceControlInfo[3];
@@ -125,7 +126,7 @@ public class IoTController {
                             list.add("0");
                             list.add("0");
                         } else if (deviceMode == DeviceMode.ON ||
-                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) < compareThreshold1 ||
+                                deviceMode == DeviceMode.AUTO && Integer.valueOf((String) array.get(0)) > compareThreshold1 ||
                                 deviceMode == DeviceMode.SCHEDULE && activation(schOn,schOff)) {
                             list.add("1");
                             list.add("27");
@@ -232,8 +233,8 @@ public class IoTController {
      *
      * @param lightThreshold Value between 0 and 1023
      */
-    public static void setLightThreshold(int lightThreshold) {
-        IoTController.lightThreshold = lightThreshold;
+    public  void setLightThreshold(int lightThreshold) {
+        this.lightThreshold = lightThreshold;
     }
 
     /**
@@ -241,8 +242,8 @@ public class IoTController {
      *
      * @param plantThreshold Value between 0 and 100
      */
-    public static void setPlantThreshold(int plantThreshold) {
-        IoTController.plantThreshold = plantThreshold;
+    public  void setPlantThreshold(int plantThreshold) {
+        this.plantThreshold = plantThreshold;
     }
 
     /**
@@ -250,8 +251,8 @@ public class IoTController {
      *
      * @param temperatureThreshold Value between 0 and 100
      */
-    public static void setTemperatureThreshold(int temperatureThreshold) {
-        IoTController.temperatureThreshold = temperatureThreshold;
+    public  void setTemperatureThreshold(int temperatureThreshold) {
+        this.temperatureThreshold = temperatureThreshold;
     }
 
     /**
@@ -259,27 +260,27 @@ public class IoTController {
      *
      * @param humidityThreshold Value between 0 and 100
      */
-    public static void setHumidityThreshold(int humidityThreshold) {
-        IoTController.humidityThreshold = humidityThreshold;
+    public  void setHumidityThreshold(int humidityThreshold) {
+        this.humidityThreshold = humidityThreshold;
     }
 
-    public static int getTemperatureThreshold() {
+    public  int getTemperatureThreshold() {
         return temperatureThreshold;
     }
 
-    public static int getHumidityThreshold() {
+    public  int getHumidityThreshold() {
         return humidityThreshold;
     }
 
-    public static int getLightThreshold() {
+    public  int getLightThreshold() {
         return lightThreshold;
     }
 
-    public static int getPlantThreshold() {
+    public  int getPlantThreshold() {
         return plantThreshold;
     }
 
-    private static boolean activation(String scheduleOn, String scheduleOff) {
+    private  boolean activation(String scheduleOn, String scheduleOff) {
         Date date = new Date(System.currentTimeMillis());   // given date
         Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
         calendar.setTime(date);   // assigns calendar to given date
@@ -316,17 +317,5 @@ public class IoTController {
             active = !active;
 
         return active;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        JSONObject object = new JSONObject();
-
-
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.add("70");
-
-        object.put("device_id", "sensor_plant_1");
-        object.put("values", jsonArray);
-        processDataAndSendToDevice(DeviceType.SENSOR_PLANT, object);
     }
 }

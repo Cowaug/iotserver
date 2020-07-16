@@ -20,7 +20,6 @@ import java.sql.Statement;
  * DO NOT MODIFY
  */
 public class Authentication {
-    static Connection connection = JawMySQL.getConnection();
     private static final byte[] SALT = System.getenv("SALT_CRYPTO").getBytes();
     private static final String SKF = System.getenv("SKF");
 
@@ -33,7 +32,7 @@ public class Authentication {
      */
     public static User login(String id, String password) throws SQLException {
         String userId = id.replace("'", "");
-        try (Statement st = connection.createStatement()) {
+        try (Connection connection = JawMySQL.getConnection();Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("select userId, permission from IoT_USERS where userId = '" + userId + "' and password = '" + hashPassword(password.toCharArray()) + "'");
             return rs.next() ? new User(userId, Permissions.valueOf(rs.getString(2))) : null;
         }
