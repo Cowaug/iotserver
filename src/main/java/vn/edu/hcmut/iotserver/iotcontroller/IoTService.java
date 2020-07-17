@@ -4,22 +4,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmut.iotserver.DeviceType;
 import vn.edu.hcmut.iotserver.database.Authentication;
 import vn.edu.hcmut.iotserver.database.IoTSensorData;
 import vn.edu.hcmut.iotserver.entities.DeviceMode;
-import vn.edu.hcmut.iotserver.entities.Permissions;
 import vn.edu.hcmut.iotserver.entities.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 import static vn.edu.hcmut.iotserver.entities.Attributes.USER_INFO;
 
@@ -29,7 +24,10 @@ public class IoTService {
     @Autowired
     IoTSensorData ioTSensorData;
 
-    public Object getStatusNologin(HttpServletRequest request) {
+    @Autowired
+    IoTController ioTController;
+
+    public Object getStatus(HttpServletRequest request) {
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
@@ -46,7 +44,7 @@ public class IoTService {
         }
     }
 
-    public Object ChangeSettingNoLogin(HttpServletRequest request) {
+    public Object ChangeSetting(HttpServletRequest request) {
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
@@ -67,7 +65,7 @@ public class IoTService {
         }
     }
 
-    public Object getSettingNoLogin(HttpServletRequest request) {
+    public Object getSetting(HttpServletRequest request) {
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
@@ -75,7 +73,7 @@ public class IoTService {
             String deviceId = (String) jsonObject.get("device_name");
 
             JSONObject ret = new JSONObject();
-            Object[] settings = IoTSensorData.getMode(deviceId);
+            Object[] settings = ioTSensorData.getMode(deviceId);
             ret.put("mode", settings[0].toString());
             ret.put("sensorValue1", settings[1]);
             ret.put("sensorValue2", settings[2]);
@@ -89,7 +87,7 @@ public class IoTService {
         }
     }
 
-    public Object setDefaultNoLogin(HttpServletRequest request){
+    public Object setDefault(HttpServletRequest request){
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
@@ -97,42 +95,42 @@ public class IoTService {
             try {
                 int tmp = Integer.valueOf(jsonObject.get("humid").toString());
                 ioTSensorData.setDefault("humid", tmp);
-                IoTController.setHumidityThreshold(tmp);
+                ioTController.setHumidityThreshold(tmp);
             } catch (Exception ignored) {
 
             }
             try {
                 int tmp = Integer.valueOf(jsonObject.get("light").toString());
                 ioTSensorData.setDefault("light", tmp);
-                IoTController.setLightThreshold(tmp);
+                ioTController.setLightThreshold(tmp);
             } catch (Exception ignored) {
 
             }
             try {
                 int tmp = Integer.valueOf(jsonObject.get("plant").toString());
                 ioTSensorData.setDefault("plant", tmp);
-                IoTController.setPlantThreshold(tmp);
+                ioTController.setPlantThreshold(tmp);
             } catch (Exception ignored) {
 
             }
             try {
                 int tmp = Integer.valueOf(jsonObject.get("temp").toString());
                 ioTSensorData.setDefault("temp", tmp);
-                IoTController.setTemperatureThreshold(tmp);
+                ioTController.setTemperatureThreshold(tmp);
             } catch (Exception ignored) {
 
             }
             try {
                 int tmp = Integer.valueOf(jsonObject.get("s_on").toString());
                 ioTSensorData.setDefault("schedule_on", tmp);
-                IoTController.setTemperatureThreshold(tmp);
+                ioTController.setTemperatureThreshold(tmp);
             } catch (Exception ignored) {
 
             }
             try {
                 int tmp = Integer.valueOf(jsonObject.get("s_off").toString());
                 ioTSensorData.setDefault("schedule_off", tmp);
-                IoTController.setTemperatureThreshold(tmp);
+                ioTController.setTemperatureThreshold(tmp);
             } catch (Exception ignored) {
 
             }
@@ -145,15 +143,15 @@ public class IoTService {
     }
 
 
-    public Object getDefaultNoLogin(HttpServletRequest request)  {
+    public Object getDefault(HttpServletRequest request)  {
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("temp", IoTController.getTemperatureThreshold());
-            jsonObject.put("plant", IoTController.getPlantThreshold());
-            jsonObject.put("light", IoTController.getLightThreshold());
-            jsonObject.put("humid", IoTController.getHumidityThreshold());
-            jsonObject.put("schedule_on", IoTController.getHumidityThreshold());
-            jsonObject.put("schedule_off", IoTController.getHumidityThreshold());
+            jsonObject.put("temp", ioTController.getTemperatureThreshold());
+            jsonObject.put("plant", ioTController.getPlantThreshold());
+            jsonObject.put("light", ioTController.getLightThreshold());
+            jsonObject.put("humid", ioTController.getHumidityThreshold());
+            jsonObject.put("schedule_on", ioTController.getHumidityThreshold());
+            jsonObject.put("schedule_off", ioTController.getHumidityThreshold());
 
             return jsonObject.toJSONString().getBytes();
         } catch (Exception e) {
