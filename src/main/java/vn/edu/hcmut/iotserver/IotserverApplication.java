@@ -26,8 +26,7 @@ public class IotserverApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(System.getenv("MQTT"));
-        System.out.println("Using WS: " + (System.getenv("WS") != null));
+        System.out.println(SERVER_URI);
         new MQTTPublisher();
     }
 }
