@@ -168,7 +168,7 @@ public class IoTService {
             try {
                 JSONParser jsonParser = new JSONParser();
                 JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(request.getInputStream()));
-                userId = (String) jsonObject.get("user-id");
+                userId = (String) jsonObject.get("user_id");
                 password = (String) jsonObject.get("password");
             } catch (Exception e) {
                 e.printStackTrace();
