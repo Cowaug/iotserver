@@ -1,4 +1,5 @@
-use vuw8gi9vft7kuo7g;
+-- use vuw8gi9vft7kuo7g;
+use `haz2z2ouxeswrwx5`;
 
 --
 --
@@ -235,99 +236,134 @@ PRIMARY KEY (_timestamp,device_id,grouped)
 -- --
 -- -- QUERY TESTING
 
-SELECT table_schema "DB Name",
-        ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
-FROM information_schema.tables 
-GROUP BY table_schema; 
+-- SELECT table_schema "DB Name",
+--         ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
+-- FROM information_schema.tables 
+-- GROUP BY table_schema; 
 
 select * from vuw8gi9vft7kuo7g.IoT_USERS;
-select * from SENSOR_TEMP order by 1 desc;
-select * from SENSOR_LIGHT order by 1 desc;
+-- select * from SENSOR_TEMP order by 1 desc;
+-- select * from SENSOR_LIGHT order by 1 desc;
 select * from SENSOR_PLANT order by 1 desc limit 0,1000000;
-select * from INDICATE_LIGHT order by 1 desc;
-select * from LIGHTBULB order by 1 desc;
-select * from AIR_CONDITIONER order by 1 desc;
-select * from LIGHTD order by 1 desc;
-select * from MOTOR order by 1 desc;
-select * from SETTING order by 1 desc;
-select * from SPEAKER order by 1 desc;
+-- select * from INDICATE_LIGHT order by 1 desc;
+-- select * from LIGHTBULB order by 1 desc;
+-- select * from AIR_CONDITIONER order by 1 desc;
+-- select * from LIGHTD order by 1 desc;
+-- select * from MOTOR order by 1 desc;
+-- select * from SETTING order by 1 desc;
+-- select * from SPEAKER order by 1 desc;
 
-select * from DEVICE_MODE order by 1 desc;
-select * from SENSOR_DEVICE_INFOS order by 1 desc;
-select * from DEVICE_INFO order by 1 desc;
+-- select * from DEVICE_MODE order by 1 desc;
+-- select * from SENSOR_DEVICE_INFOS order by 1 desc;
+-- select * from DEVICE_INFO order by 1 desc;
 
-select *
-        from AIR_CONDITIONER AS D,
-             DEVICE_MODE AS M,
-             SENSOR_DEVICE_INFOS AS SDI,
-             SENSOR_TEMP AS S,
+-- select *
+--         from AIR_CONDITIONER AS D,
+--              DEVICE_MODE AS M,
+--              SENSOR_DEVICE_INFOS AS SDI,
+--              SENSOR_TEMP AS S,
 
-             (select MAX(_timestamp) AS last_update, device_id
-              from AIR_CONDITIONER
-              GROUP BY device_id) as DT,
+--              (select MAX(_timestamp) AS last_update, device_id
+--               from AIR_CONDITIONER
+--               GROUP BY device_id) as DT,
 
-             (select MAX(_timestamp) AS last_sensor_update, device_id
-              from SENSOR_TEMP
-              GROUP BY device_id) as ST
+--              (select MAX(_timestamp) AS last_sensor_update, device_id
+--               from SENSOR_TEMP
+--               GROUP BY device_id) as ST
 
-        WHERE D.device_id = DT.device_id
-          AND D._timestamp = DT.last_update
-          AND S.device_id = ST.device_id
-          AND S._timestamp = ST.last_sensor_update
-          AND D.device_id = M.device_id
-          AND D.device_id = SDI.device_id
-          AND SDI.sensor_id = S.device_id;
-          
-SELECT DATE(S._timestamp) AS days, AVG(S.temp_value), AVG(S.humid_value) 
-FROM AIR_CONDITIONER AS D, vuw8gi9vft7kuo7g.SENSOR_DEVICE_INFOS AS SDI, SENSOR_TEMP AS S
-WHERE  D.device_id = SDI.device_id AND SDI.sensor_id = S.device_id AND DATE_ADD('2020-07-17 19:17:09', INTERVAL -7 DAY) <= DATE(D._timestamp) <= '2020-07-17 19:17:09' AND D.device_id = 'air_conditioner_1'
-GROUP BY days
-ORDER BY days;
+--         WHERE D.device_id = DT.device_id
+--           AND D._timestamp = DT.last_update
+--           AND S.device_id = ST.device_id
+--           AND S._timestamp = ST.last_sensor_update
+--           AND D.device_id = M.device_id
+--           AND D.device_id = SDI.device_id
+--           AND SDI.sensor_id = S.device_id;
+--           
+-- SELECT DATE(S._timestamp) AS days, AVG(S.temp_value), AVG(S.humid_value) 
+-- FROM AIR_CONDITIONER AS D, vuw8gi9vft7kuo7g.SENSOR_DEVICE_INFOS AS SDI, SENSOR_TEMP AS S
+-- WHERE  D.device_id = SDI.device_id AND SDI.sensor_id = S.device_id AND DATE_ADD('2020-07-17 19:17:09', INTERVAL -7 DAY) <= DATE(D._timestamp) <= '2020-07-17 19:17:09' AND D.device_id = 'air_conditioner_1'
+-- GROUP BY days
+-- ORDER BY days;
 
-SELECT * FROM SENSOR_TEMP
-order by _timestamp desc;
+-- SELECT * FROM SENSOR_TEMP
+-- order by _timestamp desc;
 
-INSERT INTO SENSOR_TEMP
-SELECT subtable._timestamp,
- subtable.device_id, 
- avg(subtable.temp_value), 
---   count(subtable.temp_value), 
- avg(subtable.humid_value),
---   count(subtable.temp_value), 
- 1 AS grouped
- FROM
-(SELECT CONCAT(
-			DATE(_timestamp), " ", 
-				TIME_FORMAT(
-					SEC_TO_TIME(
-						(TIME_TO_SEC(_timestamp) DIV 1200) * 1200
-					), '%H:%i:%s')
-		) as _timestamp,
-        device_id,
-		temp_value,
-        humid_value,
-        _timestamp as full_time
-FROM SENSOR_TEMP
-WHERE grouped = 0 and
-_timestamp < CONCAT(
-			DATE(NOW()), " ", 
-				TIME_FORMAT(
-					SEC_TO_TIME(
-						(TIME_TO_SEC(NOW()) DIV 1200) * 1200
-					), '%H:%i:%s')
-		)
-) AS subtable
-GROUP BY _timestamp, device_id
-order by _timestamp desc;
+-- INSERT INTO SENSOR_TEMP
+-- SELECT subtable._timestamp,
+--  subtable.device_id, 
+--  avg(subtable.temp_value), 
+-- --   count(subtable.temp_value), 
+--  avg(subtable.humid_value),
+-- --   count(subtable.temp_value), 
+--  1 AS grouped
+--  FROM
+-- (SELECT CONCAT(
+-- 			DATE(_timestamp), " ", 
+-- 				TIME_FORMAT(
+-- 					SEC_TO_TIME(
+-- 						(TIME_TO_SEC(_timestamp) DIV 1200) * 1200
+-- 					), '%H:%i:%s')
+-- 		) as _timestamp,
+--         device_id,
+-- 		temp_value,
+--         humid_value,
+--         _timestamp as full_time
+-- FROM SENSOR_TEMP
+-- WHERE grouped = 0 and
+-- _timestamp < CONCAT(
+-- 			DATE(NOW()), " ", 
+-- 				TIME_FORMAT(
+-- 					SEC_TO_TIME(
+-- 						(TIME_TO_SEC(NOW()) DIV 1200) * 1200
+-- 					), '%H:%i:%s')
+-- 		)
+-- ) AS subtable
+-- GROUP BY _timestamp, device_id
+-- order by _timestamp desc;
 
-DELETE FROM SENSOR_TEMP WHERE _timestamp < CONCAT(
-			DATE(NOW()), " ", 
-				TIME_FORMAT(
-					SEC_TO_TIME(
-						(TIME_TO_SEC(NOW()) DIV 1200) * 1200
-					), '%H:%i:%s'))
-	and grouped = 0;
+-- DELETE FROM SENSOR_TEMP WHERE _timestamp < CONCAT(
+-- 			DATE(NOW()), " ", 
+-- 				TIME_FORMAT(
+-- 					SEC_TO_TIME(
+-- 						(TIME_TO_SEC(NOW()) DIV 1200) * 1200
+-- 					), '%H:%i:%s'))
+-- 	and grouped = 0;
 
 SELECT * FROM SENSOR_PLANT
 order by _timestamp desc
 LIMIT 0,1000000;
+
+INSERT INTO SENSOR_PLANT
+        SELECT subtable._timestamp,
+               subtable.device_id,
+               avg(subtable.humid_value),
+               1 AS grouped
+        FROM (
+                 SELECT CONCAT(
+                                DATE(_timestamp), " ",
+                                TIME_FORMAT(
+                                        SEC_TO_TIME(
+                                                (TIME_TO_SEC(_timestamp) DIV 1200) * 1200
+                                            ), '%H:%i:%s')
+                            ) as _timestamp,
+                        device_id,
+                        humid_value
+                 FROM SENSOR_PLANT
+                 WHERE grouped = 0
+                   and _timestamp < CONCAT(
+                         DATE('2020-07-23 23:17:20.419'), " ",
+                         TIME_FORMAT(
+                                 SEC_TO_TIME(
+                                         (TIME_TO_SEC('2020-07-23 23:17:20.419') DIV 1200) * 1200
+                                     ), '%H:%i:%s')
+					)
+             ) AS subtable
+        GROUP BY _timestamp, device_id;
+        
+DELETE FROM SENSOR_PLANT WHERE _timestamp < CONCAT(
+			DATE(NOW()), " ", 
+				TIME_FORMAT(
+					SEC_TO_TIME(
+						(TIME_TO_SEC('2020-07-23 23:17:20.419') DIV 1200) * 1200
+					), '%H:%i:%s'))
+	and grouped = 0;

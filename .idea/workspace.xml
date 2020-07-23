@@ -19,9 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="Convert most function to mybatis&#10;Fix air conditional control logic">
+    <list default="true" id="8293f64c-b301-4824-9515-ce15b1b0b36a" name="Default Changelist" comment="Change login json from &quot;user-id&quot; to &quot;user_id&quot;&#10;Added auto generate sensor data">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/iotcontroller/IoTService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/iotcontroller/IoTService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vn/edu/hcmut/iotserver/database/IoTSensorData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/IoT Server.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/IoT Server.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +207,10 @@
       <workItem from="1594888667336" duration="4956000" />
       <workItem from="1595005885411" duration="1761000" />
       <workItem from="1595174346653" duration="618000" />
-      <workItem from="1595440813695" duration="460000" />
+      <workItem from="1595440813695" duration="598000" />
+      <workItem from="1595474146250" duration="701000" />
+      <workItem from="1595479239788" duration="738000" />
+      <workItem from="1595517499957" duration="3235000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <created>1589474525998</created>
@@ -432,7 +436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595007399757</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Change login json from &quot;user-id&quot; to &quot;user_id&quot;&#10;Added auto generate sensor data">
+      <created>1595441335025</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1595441335025</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -451,8 +462,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added login, register" />
-    <MESSAGE value="added database init commands" />
     <MESSAGE value="Fixed login issue when using &quot;json&quot; instead of &quot;form-data&quot;" />
     <MESSAGE value="Fix SQL Injection flaws" />
     <MESSAGE value="Complete pushToDatabase function + rearrange database class + modify mqtt interface" />
@@ -476,7 +485,9 @@
     <MESSAGE value="Convert most function to mybatis" />
     <MESSAGE value="Convert most function to mybatis&#10;Fix air conditional control logic" />
     <MESSAGE value="Get server IP from system env" />
-    <option name="LAST_COMMIT_MESSAGE" value="Get server IP from system env" />
+    <MESSAGE value="Change login json from &quot;user-id&quot; to &quot;user_id&quot;" />
+    <MESSAGE value="Change login json from &quot;user-id&quot; to &quot;user_id&quot;&#10;Added auto generate sensor data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change login json from &quot;user-id&quot; to &quot;user_id&quot;&#10;Added auto generate sensor data" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="1263" key="#Deployment" timestamp="1591854674916">
@@ -629,11 +640,11 @@
     <state x="440" y="99" key="SettingsEditor/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1592289804134" />
     <state x="440" y="1179" key="SettingsEditor/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1594892914702" />
     <state x="440" y="99" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1589534447335" />
-    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1595007400736">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2" timestamp="1595441336962">
+      <screen x="0" y="1080" width="1920" height="1050" />
     </state>
     <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.0.1920.1050" timestamp="1595007400736" />
-    <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1594893611071" />
+    <state x="552" y="1337" key="Vcs.Push.Dialog.v2/0.0.1920.1050/0.1080.1920.1050@0.1080.1920.1050" timestamp="1595441336962" />
     <state x="58" y="113" width="1736" height="866" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1593968630007">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>

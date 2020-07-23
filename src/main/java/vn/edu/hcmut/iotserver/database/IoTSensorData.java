@@ -35,7 +35,7 @@ public class IoTSensorData {
      */
     @Transactional
     public void pushToDatabase(DeviceType deviceType, JSONObject payload){
-            Timestamp sqlTimestamp = new Timestamp(System.currentTimeMillis());
+            String sqlTimestamp = new Timestamp(System.currentTimeMillis()).toString();
 
             StringBuilder valueString = new StringBuilder();
             valueString
@@ -50,14 +50,20 @@ public class IoTSensorData {
             valueString.append(",").append(0);
             sqlSession.insert("IoTMapper.pushToDatabase", new Object[]{deviceType.getDatabase(),valueString});
 
-            if(System.currentTimeMillis() - lastCleanUpCheckPoint > 10*60*1000)
+            if(System.currentTimeMillis() - lastCleanUpCheckPoint > 10*60*1000) // 10 mins
             {
-                sqlSession.insert("IoTMapper.groupSensorTemp", new Object[]{sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.insert("IoTMapper.groupSensorTemp", new Object[]{sqlTimestamp.toString(),GROUP_INTERVAL});
                 sqlSession.insert("IoTMapper.groupSensorLight", new Object[]{sqlTimestamp,GROUP_INTERVAL});
                 sqlSession.insert("IoTMapper.groupSensorPlant", new Object[]{sqlTimestamp,GROUP_INTERVAL});
                 sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_TEMP.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
                 sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_LIGHT.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
                 sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.SENSOR_PLANT.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.LIGHT_BULB.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.MOTOR.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.AIR_CONDITIONER.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.LightD.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
+                sqlSession.delete("IoTMapper.deleteOldRecord", new Object[]{DeviceType.Speaker.getDatabase(),sqlTimestamp,GROUP_INTERVAL});
                 lastCleanUpCheckPoint = System.currentTimeMillis();
             }
     }
